@@ -1,0 +1,19 @@
+Create an exercise / drill for an Operating Systems class session.
+The session topic is the operating systems interface, i.e. the system call interface.
+
+The exercise asks students to implement a `clock_gettime()` wrapper function and a `time()` function, similar to those exposed by the standard C library.
+The functions to be implemented are to be called `my_clock_gettime()` and `my_time()`.
+
+Create 4 files:
+- `my_time.c`: implements the `clock_gettime()` wrapper function and the `time()` function
+- `my_time.h`: implements the header file exposing the two functions
+- `main.c`: implements the `main()` function that calls the two functions
+- `Makefile`: the recipe file to build the files
+
+These files are to be located both in the `bonus-clock_gettime/` directory and in the `solution/bonus-clock_gettime/` directory.
+Differences are:
+- the simple directory contains missing items with comments where the students must add their implementation (marked clearly as TODO comments)
+- the solution directory contains the reference solution; it's a copy of the simple directory files with the missing items filled (the TODO comments are still there for completion)
+- each directory contains a `README.md` file; the simple directory presents the aim of the exercise and instructions on how to implement it and also how to build, run and test the implementation; the solution directory contains a solution section describing how the solution works
+
+Consider the structure of the `01-getpid/` and `02-nanosleep/` directories.
