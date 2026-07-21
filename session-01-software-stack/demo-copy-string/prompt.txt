@@ -1,0 +1,5 @@
+Create a README.md for the current tutorial files, that presents:
+- The overall aim of the demo / tutorial: how various string functions can yield different outcomes (in terms of duration)
+- How to build the two executables
+- How to run the executables
+- An explanation of the results
