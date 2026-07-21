@@ -1,0 +1,16 @@
+Create an exercise / drill for an Operating Systems class session.
+The session topic is the operating systems interface, i.e. the system call interface.
+
+The exercise asks students to integrate the `printf()` implementation from this repository (https://github.com/mpaland/printf - cloned in the `printf/` directory) in a C program.
+The user has to implement the `_putchar()` function, as a wrapper to the `write` system call.
+
+Create 3 files:
+- `_putchar.c`: implements the `_putchar()` function required by `printf()`
+- `main.c`: implements calls to `*printf*()` functions from the `printf/` directory
+- `Makefile`: the recipe file to build the files
+
+These files are to be located both in the `bonus-printf/` directory and in the `solution/bonus-printf/` directory.
+Differences are:
+- the simple directory contains missing items with comments where the students must add their implementation (marked clearly as TODO comments)
+- the solution directory contains the reference solution; it's a copy of the simple directory files with the missing items filled (the TODO comments are still there for completion)
+- each directory contains a `README.md` file; the simple directory presents the aim of the exercise and instructions on how to implement it and also how to build, run and test the implementation; the solution directory contains a solution section describing how the solution works
