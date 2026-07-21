@@ -1,0 +1,14 @@
+Implement Caesar and Vigenere stream ciphers.
+Create 5 files:
+- `main.c`: implements the main program, that receives command line arguments to call the `caesar()` or the `vigenere()` functions
+- `caesar.c`: implements the `caesar()` function
+- `caesar.h`: exposes the `caesar()` function interface
+- `vigenere.c`: implements the `vigenere()` function
+- `vigenere.h`: exposes the `vigenere()` function interface
+
+Create a README.md file that details how to build and run an executable to try out the implementation of the Caesar and Vigenere ciphers.
+In the README present instructions to build:
+1. a dynamically-linked executable by compiling and linking all C source code files
+2. a statically-linked executable by compiling and linking all C source code files
+3. a dynamically-linkable library libcipher.so from the `caesar.c` and `vigenere.c` files and a dynamically-linked executable from `main.c` and the dynamically-linkable library
+4. a statically-linkable library libcipher.a from the `caesar.c` and `vigenere.c` files and a statically-linked executable from `main.c` and the statically-linkable library
