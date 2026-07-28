@@ -1,0 +1,6 @@
+I want you to create some exercises for an operating systems class. The session will be about memory, I want you to have the students create a in-memory database, using malloc. I want the task to be detailed in a REAMDE file and a very simple skel
+file that the students have to complete, with TODOs. The elements of the database will be read from the stdin, the database will be dynamically reallocated (only expanded, not shrinked) if needed, in constant chunks. The allocations will be done
+using malloc/realloc, etc. Keep the design as simple as possible.
+Add another task in a directory called bonus-in-mem-database that will extend the database to allow size reduction. If the db is currently at size X*N and elements are freed so it fits into (X-1)*N, the database is rearranged and shrinked. Just add a README file that explains the tasks and bases it on the first task. Add reference solutions in different files in both directories.
+Add a Makefile to build both solutions, and the skel file (make will build the skel, make sol will build the solution). Do not mention the Makefiles in the README or anywhere else, just create them.
+Add a sample input.txt file to both directories.
