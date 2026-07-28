@@ -1,0 +1,20 @@
+Create a demo exercise for an Operating Systems class session.
+The session topic is the memory operations: allocating, freeing, accessing memory.
+
+The demo implements a simple copy file (similar to the `cp` command).
+The source and destination files are presented as two command line arguments.
+The demo is to be implemented in the solutions/demo-copy-file/ directory.
+The demo has 3 variants, as 3 subdirectories:
+- `global-buffer/`: the copying of contents from the source to destination file is facilitated by a static global buffer, and the use of `memcpy()`
+- `malloc/`: the copying of contents from the source to destination file is facilitated by a dynamically allocated buffer, allocated via `malloc()`, and the use of `memcpy()`
+- `mmap/`: the copying of contents from the source to destination file is facilitated by the `mmap()` call, that maps both the source and destination file, and then copies the contents via `memcpy()`
+
+In each subdirectory create 3 files:
+- `create_file.c`: implements the copying of files (received as two command line arguments)
+- `Makefile`: the recipe file to build the files
+- `README.md`: presents the aim of the exercise and instructions on how to build, run and test the implementation
+
+The structure and contents are replicated in the `demo-copy-file/` directory, i.e. **not** the solutions directory.
+Differences are:
+- each subdirectory of the `demo-copy-file/` directory contains missing items with comments where the students must add their implementation (marked clearly as TODO comments)
+- the `README.md` presents complete instructions, tutorial like, on what needs to be done in the source code file (part of the TODO comments) and, very importantly, why, in order to implement the demo and see how it works.
