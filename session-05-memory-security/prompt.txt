@@ -1,0 +1,27 @@
+These are exercises for an Operating Systems class session.
+The session topic is memory security and exercises follow a CTF structure: the student is presented with a challenge binary (and source code), it identifies the issue, and then exploits it. There is a remote deployment: the student creates an exploit for the remote deployment and then gets the flag.
+
+There are 8 challenges in the current directory, each with their own directory:
+- `demo-heap-0/` and `demo-heap-1/` are challenges to be solved together by the teaching assistant and students at the beginning of the practice session; they have no content; please generate content for them (see below)
+- `01-cylab-heap-0/`, `02-cylab-heap-1/`, `03-cylab-heap-2/`, `04-cylab-heap-3/` are challenges to be solved individually by students; they already have contents (source code file `chall.c`, binary file `chall` and a small README.md); they are taken from CyLab Security Academy - link to that is part of the `README.md` file.
+- `bonus-cylab-heap-havoc/` is a more complex challenge, aimed to be a bonus challenge for those who go quickly through the first challenges; it also has contents taken from CyLab Security Academy with link in the `README.md` file.
+- `bonus-heap-mayhem/` is another bonus challenge; this has no content; please generate content for it (see below)
+
+The aim is to provide the public files, as well as the deployment and reference solution files / scripts for all challenges.
+
+For that, do the following:
+
+1. Update and format the source code of the C files to fit the style of the Linux kernel.
+   Improve format, improve syntax, add comments where required.
+
+2. In the solutions/ directory create, for each challenge, the required content to build, deploy as Docker, and the reference solution for each challenge.
+   Take inspiration from challenge directories in the workshop-ctf-design-and-deploy/ directory.
+
+3. Create contents for the `demo-heap-0/` and `demo-heap-1/` that are very similar to `01-cylab-heap-0/` and `02-cylab-heap-1/`.
+   These are going to be demo challenges to be solved together by the teaching assistant and students.
+   We want them to be very close to the `01-cylab-heap-0/` and `02-cylab-heap-1/` challenge, which are to be solved individually, in order for students to quickly go through them and have good morale on solving challenges, as they've solved two similar ones during in the demo.
+
+4. Create contents for the `bonus-heap-maybem/` challenge which is aimed to be a more difficult challenge, on par with the `bonus-cylab-heap-havoc/` challenge.
+
+5. For all Dockerfiles, scripts, reference solutions, instructions, build commands, make sure they all work correctly.
+   Run corresponding command to ensure functionality.
