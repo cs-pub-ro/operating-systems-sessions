@@ -1,0 +1,7 @@
+Create a bonus exercise for an Operating Systems class session.
+The session topic is memory debugging: using manual inspection, GDB, Valgrind to discover and repair memory issues.
+
+Implement a mini JSON parser/serializer.
+Create two directories: solutions/bonus-json-parser/ and bonus-json-parser/ following the same model as the 03-symbol-hash-table/ exercise.
+The bonus-json-parser/ directory will contain a memory issue to be fixed by the student.
+THe solutions/bonus-json-parser/ containes the fixed solution to the issue.
