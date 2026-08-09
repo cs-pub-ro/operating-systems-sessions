@@ -1,0 +1,12 @@
+Create a demo exercise for an Operating Systems class session.
+The session topic is memory debugging: using manual inspection, GDB, Valgrind to discover and repair memory issues.
+
+The demo presents a binary file (no source code) that the student has to analyze, identify the issue and the do a binary patching in order to solve the issue.
+The source code is in solutions/bonus-binary-issue/vuln.c.
+
+Do the following:
+- Add a `Makefile` to build the corresponding binary (x86_64 ELF).
+- Add a script that parses and patches the binary and fixes the buffer overflow issue.
+- Add a `README.md` file that presents the aim of the exercise and instructions on how to build, run and test the file, how to apply the script patcher.
+- Copy the corresponding binary in the bonus-binary-issue/ directory.
+- Add a `README.md` in the bonus-binary-issue/ directory with the instructions about the aim of the exercise and hints on how to identify the issue and patch the binary file.
