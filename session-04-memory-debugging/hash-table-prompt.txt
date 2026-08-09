@@ -1,0 +1,14 @@
+Create a demo exercise for an Operating Systems class session.
+The session topic is memory debugging: using manual inspection, GDB, Valgrind to discover and repair memory issues.
+
+The demo implements a hash table using a string hash function, that maps program symbol names (as keys) to values. The value is the symbol address, and the memory area where it is located (data, rodata, bss, text).
+The hash table is implemented in a file called `symbol_hash_table.c`.
+The interface (function signatures, macros, data structures) is in a header file called `symbol_hash_table.h`.
+A test of the hash table is implemented in `main.c`, calling various functions as a typical program using a symbol hash table would do.
+The demo is to be implemented in the solutions/03-symbol-hash-table/ directory.
+Add a `README.md` file that presents the aim of the exercise and instructions on how to build, run and test the implementation.
+
+The contents are replicated in the `03-symbol-hash-table/` directory, i.e. **not** the solutions directory.
+Differences are:
+- the implementation in `symbol_hash_table.c` contains 3 programming mistakes that manifest themselves as memory related issues (arbitrary memory access, NULL pointer dereferencing, double free, memory leaks etc.) that are to be investigated by the student via manual inspection of the use of tools such as GDB or Valgrind
+- the `README.md` presents information on how to build, run and test the implementation and hints on how to fix the 3 issues, without revealing what is the root cause of each issue
