@@ -1,0 +1,12 @@
+/caesar
+/caesar-static
+/caesar-dyn
+/caesar-static-lib
+/vigenere
+/vigenere-static
+/vigenere-dyn
+/vigenere-static-lib
+/libcaesar.so
+/libcaesar.a
+/libvigenere.so
+/libvigenere.a
