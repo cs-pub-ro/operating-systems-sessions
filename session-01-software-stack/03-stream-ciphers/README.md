@@ -4,8 +4,8 @@
 
 This drill implements two classical stream ciphers:
 
-- **Caesar cipher** — shifts every letter in the input by a fixed integer offset.
-- **Vigenere cipher** — shifts each letter by the value of the corresponding character in a repeating key.
+* **Caesar cipher** — shifts every letter in the input by a fixed integer offset.
+* **Vigenere cipher** — shifts each letter by the value of the corresponding character in a repeating key.
 
 The program is invoked as:
 
@@ -103,7 +103,8 @@ Hello, World!
 
 ### Caesar
 
-Each letter is shifted by a constant `shift` (mod 26). Non-letter characters are left unchanged.
+Each letter is shifted by a constant `shift` (mod 26).
+Non-letter characters are left unchanged.
 
 ```text
 encrypt: C = (P + shift) mod 26

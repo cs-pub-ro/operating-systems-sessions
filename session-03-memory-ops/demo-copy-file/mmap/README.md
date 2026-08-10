@@ -2,16 +2,13 @@
 
 ## Aim
 
-Implement a file-copy program that uses `mmap()` to map both the source and the
-destination files into the process address space, then copies their contents
-with a single `memcpy()` call.
+Implement a file-copy program that uses `mmap()` to map both the source and the destination files into the process address space, then copies their contents with a single `memcpy()` call.
 
 This exercise illustrates:
+
 1. How `mmap()` maps a file (or anonymous memory) into virtual address space.
-2. How the kernel transparently handles I/O through page faults when you
-   read/write mapped regions.
-3. How `munmap()` releases a mapping, and how `msync()` flushes dirty pages
-   back to the file.
+1. How the kernel transparently handles I/O through page faults when you read/write mapped regions.
+1. How `munmap()` releases a mapping, and how `msync()` flushes dirty pages back to the file.
 
 ## Background
 
@@ -32,8 +29,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 
 Returns a pointer to the mapped region, or `MAP_FAILED` on error.
 
-After a successful `mmap()` the file descriptor can be closed — the mapping
-keeps the file referenced internally until `munmap()` is called.
+After a successful `mmap()` the file descriptor can be closed — the mapping keeps the file referenced internally until `munmap()` is called.
 
 ### ftruncate — setting file size
 
@@ -41,9 +37,8 @@ keeps the file referenced internally until `munmap()` is called.
 int ftruncate(int fd, off_t length);
 ```
 
-Before mapping a destination file for writing it must be at least `length`
-bytes long.  `ftruncate()` extends (or shrinks) the file to exactly `length`
-bytes, filling new space with zeros.
+Before mapping a destination file for writing it must be at least `length` bytes long.
+`ftruncate()` extends (or shrinks) the file to exactly `length` bytes, filling new space with zeros.
 
 ### munmap and msync
 
@@ -52,9 +47,8 @@ int munmap(void *addr, size_t length);
 int msync(void *addr, size_t length, int flags);
 ```
 
-`munmap()` releases the mapping.  For `MAP_SHARED` mappings, use
-`msync(addr, length, MS_SYNC)` before `munmap()` to guarantee dirty pages are
-flushed to disk.
+`munmap()` releases the mapping.
+For `MAP_SHARED` mappings, use `msync(addr, length, MS_SYNC)` before `munmap()` to guarantee dirty pages are flushed to disk.
 
 ## Tasks
 
@@ -72,13 +66,11 @@ if (src_map == MAP_FAILED) {
 close(src_fd);  /* fd no longer needed after mmap */
 ```
 
-`MAP_PRIVATE` is used because we only need to read the source; we do not want
-changes reflected back to the file.
+`MAP_PRIVATE` is used because we only need to read the source; we do not want changes reflected back to the file.
 
 ### TODO 2 — Unmap src_map on early exit
 
-Any error path after the source mapping is created must call
-`munmap(src_map, file_size)` before returning.
+Any error path after the source mapping is created must call `munmap(src_map, file_size)` before returning.
 
 ### TODO 3 — Resize the destination file with ftruncate
 
@@ -91,8 +83,7 @@ if (ftruncate(dst_fd, (off_t)file_size) < 0) {
 }
 ```
 
-Without this step `mmap()` on the destination would fail because the file is
-empty and cannot back a mapping of `file_size` bytes.
+Without this step `mmap()` on the destination would fail because the file is empty and cannot back a mapping of `file_size` bytes.
 
 ### TODO 4 — Map the destination file (read-write, shared)
 
@@ -108,8 +99,7 @@ if (dst_map == MAP_FAILED) {
 close(dst_fd);
 ```
 
-`MAP_SHARED` means that writes to `dst_map` are eventually written back to
-the underlying file.
+`MAP_SHARED` means that writes to `dst_map` are eventually written back to the underlying file.
 
 ### TODO 5 — Copy with memcpy
 
@@ -118,8 +108,7 @@ memcpy(dst_map, src_map, file_size);
 ```
 
 Both `src_map` and `dst_map` are ordinary pointers to virtual memory.
-`memcpy()` copies bytes between them; the kernel resolves page faults to load
-source pages and allocate destination pages as needed.
+`memcpy()` copies bytes between them; the kernel resolves page faults to load source pages and allocate destination pages as needed.
 
 ### TODO 6 — Flush and unmap
 
@@ -131,19 +120,19 @@ munmap(dst_map, file_size);
 
 ## Build
 
-```bash
+```console
 make
 ```
 
 ## Run
 
-```bash
+```console
 ./copy_file <source> <destination>
 ```
 
 Example:
 
-```bash
+```console
 dd if=/dev/urandom of=input.bin bs=1M count=4
 ./copy_file input.bin output.bin
 diff input.bin output.bin && echo "Files are identical"
@@ -151,6 +140,6 @@ diff input.bin output.bin && echo "Files are identical"
 
 ## Clean
 
-```bash
+```console
 make clean
 ```

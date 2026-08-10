@@ -6,8 +6,8 @@ This tutorial demonstrates how different approaches to string concatenation in C
 
 Two programs build the same string (`"John, Paul, George, Joel "`) 100,000,000 times and measure the elapsed time:
 
-- **`copy-string`** — uses `strcat` repeatedly, which must scan to the end of the string on every call.
-- **`copy-string-improved`** — uses `strcpy` with precomputed offsets, writing each fragment directly to the correct position without re-scanning.
+* **`copy-string`** — uses `strcat` repeatedly, which must scan to the end of the string on every call.
+* **`copy-string-improved`** — uses `strcpy` with precomputed offsets, writing each fragment directly to the correct position without re-scanning.
 
 The goal is to illustrate that even simple-looking standard library calls can have hidden algorithmic costs, and that understanding what a function does internally allows you to write measurably faster code.
 
@@ -54,10 +54,10 @@ strcat(bigString, "Joel ");
 `strcat(dst, src)` first walks `dst` from the beginning to find its null terminator, then copies `src` there.
 With four consecutive `strcat` calls:
 
-- The 1st call scans 0 characters before appending.
-- The 2nd call scans 6 characters (`"John, "`).
-- The 3rd call scans 12 characters (`"John, Paul, "`).
-- The 4th call scans 21 characters (`"John, Paul, George, "`).
+* The 1st call scans 0 characters before appending.
+* The 2nd call scans 6 characters (`"John, "`).
+* The 3rd call scans 12 characters (`"John, Paul, "`).
+* The 4th call scans 21 characters (`"John, Paul, George, "`).
 
 This redundant scanning grows with the number of fragments and repeats on every one of the 100,000,000 iterations.
 

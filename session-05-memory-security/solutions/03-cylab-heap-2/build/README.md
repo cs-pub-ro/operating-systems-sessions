@@ -4,19 +4,15 @@ Source code and build environment for the "heap2" challenge.
 
 ## Building
 
-Build the builder image, then run it against this directory (mounted so
-the compiled binary is written back to your host machine):
+Build the builder image, then run it against this directory (mounted so the compiled binary is written back to your host machine):
 
 ```console
 docker build -t heap2-builder .
 docker run --rm -v "$(pwd):/build" heap2-builder make
 ```
 
-This produces `chall`, `libc.so.6`, and `ld-linux-x86-64.so.2` in this directory --
-the binary and the exact libc/loader it was built and tested against.
-Shipping the matching libc/loader matters here: this challenge is a heap
-exploit, and heap chunk layout depends on the specific glibc allocator
-implementation.
+This produces `chall`, `libc.so.6`, and `ld-linux-x86-64.so.2` in this directory -- the binary and the exact libc/loader it was built and tested against.
+Shipping the matching libc/loader matters here: this challenge is a heap exploit, and heap chunk layout depends on the specific glibc allocator implementation.
 
 ## Post-build
 

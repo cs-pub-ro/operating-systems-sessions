@@ -2,14 +2,13 @@
 
 ## Aim
 
-Implement a file-copy program that uses a **static global buffer** and
-`memcpy()` to transfer data from a source file to a destination file.
+Implement a file-copy program that uses a **static global buffer** and `memcpy()` to transfer data from a source file to a destination file.
 
 This exercise illustrates:
-1. How static (global) memory is allocated at compile time and lives for the
-   entire process lifetime.
-2. How `memcpy()` copies a block of bytes between two memory regions.
-3. The read → copy → write loop that underpins most simple I/O programs.
+
+1. How static (global) memory is allocated at compile time and lives for the entire process lifetime.
+1. How `memcpy()` copies a block of bytes between two memory regions.
+1. The read → copy → write loop that underpins most simple I/O programs.
 
 ## Background
 
@@ -21,10 +20,9 @@ When you declare a variable outside any function:
 static char buffer[1024 * 1024];
 ```
 
-the compiler places it in the **BSS segment** (zero-initialised) or the
-**data segment** (if explicitly initialised).  The operating system maps this
-region into the process address space before `main()` is called.  You do not
-need `malloc()` or `free()` — the memory is always there.
+the compiler places it in the **BSS segment** (zero-initialised) or the **data segment** (if explicitly initialised).
+The operating system maps this region into the process address space before `main()` is called.
+You do not need `malloc()` or `free()` — the memory is always there.
 
 ### memcpy
 
@@ -32,8 +30,8 @@ need `malloc()` or `free()` — the memory is always there.
 void *memcpy(void *dest, const void *src, size_t n);
 ```
 
-Copies exactly `n` bytes from `src` to `dest`.  The two regions **must not
-overlap** (use `memmove()` if they might).
+Copies exactly `n` bytes from `src` to `dest`.
+The two regions **must not overlap** (use `memmove()` if they might).
 
 ## Tasks
 
@@ -47,26 +45,23 @@ Add the following line at file scope (outside `main`):
 static char buffer[BUFFER_SIZE];
 ```
 
-Because it is `static` and global, the buffer is zero-initialised and does
-not need to be freed.
+Because it is `static` and global, the buffer is zero-initialised and does not need to be freed.
 
 ### TODO 2 — Copy data with memcpy
 
-Inside the read loop, after `fread()` fills `buffer`, declare a local
-staging array and copy the data into it:
+Inside the read loop, after `fread()` fills `buffer`, declare a local staging array and copy the data into it:
 
 ```c
 char local[BUFFER_SIZE];
 memcpy(local, buffer, bytes_read);
 ```
 
-This makes the use of `memcpy()` explicit.  In a real program you would
-write directly from `buffer`, but copying first is intentional here.
+This makes the use of `memcpy()` explicit.
+In a real program you would write directly from `buffer`, but copying first is intentional here.
 
 ### TODO 3 — Write data to the destination file
 
-Use `fwrite()` to write `bytes_read` bytes from `local` to `dst`, and check
-for a short write:
+Use `fwrite()` to write `bytes_read` bytes from `local` to `dst`, and check for a short write:
 
 ```c
 size_t bytes_written = fwrite(local, 1, bytes_read, dst);
@@ -80,19 +75,19 @@ if (bytes_written != bytes_read) {
 
 ## Build
 
-```bash
+```console
 make
 ```
 
 ## Run
 
-```bash
+```console
 ./copy_file <source> <destination>
 ```
 
 Example:
 
-```bash
+```console
 dd if=/dev/urandom of=input.bin bs=1M count=4
 ./copy_file input.bin output.bin
 diff input.bin output.bin && echo "Files are identical"
@@ -100,6 +95,6 @@ diff input.bin output.bin && echo "Files are identical"
 
 ## Clean
 
-```bash
+```console
 make clean
 ```

@@ -2,17 +2,15 @@
 
 Same three-layer pattern as the previous exercises:
 
-```
+```text
   my_time()   -->   my_clock_gettime()   -->   my_syscall()   -->   kernel
 ```
 
-This time you implement **`clock_gettime(2)`**, the system call that reads a
-high-resolution clock, and build a libc-style **`time()`** on top of it.
+This time you implement **`clock_gettime(2)`**, the system call that reads a high-resolution clock, and build a libc-style **`time()`** on top of it.
 
 ## Background: `clock_gettime` and `struct timespec`
 
-`clock_gettime` returns the time for a specified clock as a `timespec` (run
-`man 2 clock_gettime`):
+`clock_gettime` returns the time for a specified clock as a `timespec` (run `man 2 clock_gettime`):
 
 ```c
 struct timespec {
@@ -27,59 +25,53 @@ Its prototype is:
 int clock_gettime(clockid_t clkid, struct timespec *tp);
 ```
 
-- `clkid` — which clock to read, e.g. `CLOCK_REALTIME` (wall-clock time since
-  the Unix Epoch) or `CLOCK_MONOTONIC` (monotonically increasing, good for
-  measuring durations).
-- `tp` — output parameter; the kernel fills it with the current time.
+* `clkid` — which clock to read, e.g. `CLOCK_REALTIME` (wall-clock time since the Unix Epoch) or `CLOCK_MONOTONIC` (monotonically increasing, good for measuring durations).
+* `tp` — output parameter; the kernel fills it with the current time.
 
-`time(2)` is a simpler call that returns only the whole-second part of
-`CLOCK_REALTIME`:
+`time(2)` is a simpler call that returns only the whole-second part of `CLOCK_REALTIME`:
 
 ```c
 time_t time(time_t *tloc);
 ```
 
-It can be implemented on top of `clock_gettime` by reading `CLOCK_REALTIME`
-and returning `tv_sec`.
+It can be implemented on top of `clock_gettime` by reading `CLOCK_REALTIME` and returning `tv_sec`.
 
 ## Your tasks
 
 ### 1. `my_time.h` — declare the two functions
 
-Open `my_time.h` and add the function declarations for `my_clock_gettime()`
-and `my_time()` where the TODO comments indicate.
+Open `my_time.h` and add the function declarations for `my_clock_gettime()` and `my_time()` where the TODO comments indicate.
 
 ### 2. `my_time.c` — implement the functions
 
 Open `my_time.c` and complete the three TODOs:
 
 1. **`SYS_clock_gettime`** — define the correct x86-64 syscall number.
-2. **`my_clock_gettime()`** — the syscall wrapper. Pass `clkid` as the first
-   argument and `tp` (cast to `long`) as the second; use `0` for the rest.
-3. **`my_time()`** — get `CLOCK_REALTIME` via `my_clock_gettime()`, optionally
-   write the result to `*tloc`, and return `tv_sec`.
+1. **`my_clock_gettime()`** — the syscall wrapper.
+   Pass `clkid` as the first argument and `tp` (cast to `long`) as the second; use `0` for the rest.
+1. **`my_time()`** — get `CLOCK_REALTIME` via `my_clock_gettime()`, optionally write the result to `*tloc`, and return `tv_sec`.
 
 ### Finding the syscall number
 
-```sh
+```console
 less /usr/include/asm/unistd_64.h
 ```
 
 ## Build
 
-```sh
+```console
 make
 ```
 
 ## Run
 
-```sh
+```console
 ./clock_gettime_demo
 ```
 
 Expected output (numbers will differ):
 
-```
+```text
 my_clock_gettime: tv_sec=1753000000, tv_nsec=123456789
 my_time:          1753000000
 ```
@@ -90,16 +82,14 @@ The two `tv_sec` / `my_time` values should be equal (or differ by at most 1).
 
 Verify the syscall is actually invoked:
 
-```sh
+```console
 strace -e trace=clock_gettime ./clock_gettime_demo
 ```
 
-You should see two `clock_gettime(CLOCK_REALTIME, ...)` lines (one per
-function call in `main`), and the kernel-reported seconds should match what
-you printed.
+You should see two `clock_gettime(CLOCK_REALTIME, ...)` lines (one per function call in `main`), and the kernel-reported seconds should match what you printed.
 
 You can also cross-check against the system's `date` command:
 
-```sh
+```console
 date +%s
 ```

@@ -1,7 +1,6 @@
 # Solve
 
-Solution script and a containerized solver environment for the
-"heap-mayhem" challenge.
+Solution script and a containerized solver environment for the "heap-mayhem" challenge.
 
 ## Prerequisites
 
@@ -11,16 +10,14 @@ Solution script and a containerized solver environment for the
    docker build -t heap-mayhem-solver .
    ```
 
-1. Ensure `../publish/chall` exists (for local solving) -- see
-   `../build/README.md` and `../publish/README.md`.
+1. Ensure `../publish/chall` exists (for local solving) -- see `../build/README.md` and `../publish/README.md`.
 
 ## Running the solution
 
 ### 1. Local solve (inside container)
 
-Runs the exploit against the binary directly inside the solver
-container. We mount the current directory (for `exploit.py`) and
-`../publish` (for `chall` and its libc/loader).
+Runs the exploit against the binary directly inside the solver container.
+We mount the current directory (for `exploit.py`) and `../publish` (for `chall` and its libc/loader).
 
 ```console
 docker run --rm -it \
@@ -33,14 +30,9 @@ docker run --rm -it \
 
 ### 2. Solve against a local deployment
 
-Runs the exploit against the challenge service started via
-`../deploy/README.md` (listening on `localhost:31021`).
+Runs the exploit against the challenge service started via `../deploy/README.md` (listening on `localhost:31021`).
 
-> [!NOTE]
-> **Linux:** `--network host` lets the container reach `localhost` on the
-> host directly.
-> **macOS/Windows:** use `host.docker.internal` instead of `127.0.0.1` and
-> drop `--network host`.
+> [!NOTE] **Linux:** `--network host` lets the container reach `localhost` on the host directly. **macOS/Windows:** use `host.docker.internal` instead of `127.0.0.1` and drop `--network host`.
 
 ```console
 docker run --rm -it --network host \

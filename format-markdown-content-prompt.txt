@@ -1,0 +1,12 @@
+For all Markdown files, apply the following changes:
+
+* Use `*` instead of `-` as a way to list items in unordered lists
+* Make sure each ordered or unordered list is preceded and succeded by an empty line.
+* For easy updating of repository contents, each sentence should be on one line and one line only. That is, if a paragraph consists of 4 sentences, we would have 4 lines, with a line for each sentence. Each sentences is on its own line, starting from the beginning of the line. Be sure to indent properly sentences belonging to a list item (for proper rendering).
+* For commands, use the `console` format type, instead of `bash`. `bash` is to be used only when listing shell scripts. For commands, the format is "```console" instead of "```bash".
+* Every code block opening fence is preceded by a blank line. Every code block closing fence is succeded by a blank line. No blank lines immediately after the open fence. No blank lines immediately before the closing fence.
+* Make sure there are no trailing whitespaces in each line.
+* Each snippet / code block should have a type (a name after the triple backticks), such as "```console" or "```C" or "```python" or "```text". If there is no predefined format, use "```text".
+* For ordered list items, only use `1.` to number items. Markdown rendering engine will increment the number appropriately. And it's more maintainable: we only use `1.`; when inserting a new item we will use `1.`; otherwise we would have to do renumbering.
+* For ordered and unordered list items make sure there is exactly one space between the list items preffix (`1.` for ordered lists and `*` for unordered lists) and the contents of the list item.
+* When you have a list of items as bold topical items (such as **Duration**, **Platform**, **Difficulty**) be sure to either mark them as unordered list items or separate them with a blank line. Otherwise, they will be rendered all in one line. Markdown rendering engines coallesce sequential lines in the Markdown file (i.e. not separated by a blank line) into a single rendered line.
