@@ -1,6 +1,6 @@
 # Exercise: the `getpid` system call
 
-In the [write demo](../demo-write-syscall) you saw the three-layer pattern:
+In the [write demo](../demo-puts-write) you saw the three-layer pattern:
 
 ```text
   high-level helper   -->   syscall wrapper   -->   my_syscall()   -->   kernel

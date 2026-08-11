@@ -17,3 +17,5 @@ TAGS
 *.class
 *.jar
 *.pyc
+_site/
+__pycache__/
