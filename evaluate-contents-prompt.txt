@@ -1,0 +1,37 @@
+We are preparing contents for a class on Operating Systems, part of a 4 year technical university.
+The class is part of the 2nd year, 1s semester.
+Students have been part of an Introduction to Operating Systems class, where they learned the basics of operating systems, focused on use and administration (mostly command-line), no programming, only shell / Bash scripting.
+They did a Computer Programming class and a Data Structure class, using the C programming language.
+The did a Hardware-Software Interface class focused on the lower parts of the C programming language and assembly language.
+
+The Operating Systems class is a more advanced class, focused on understanding key concepts (memory, processes, threads, synchronization, input-output, networking, the software interface, system calls, privilege domains).
+The practical part is done in C, using low-level components for getting a thorough understanding of the software stack, particularly the lower bits.
+The aim is to have full stack engineering skills required to design, imepllement, evaluate, maintain, integrate software components in modern computing systems.
+
+The chapters of the class are:
+
+1. The Software Stack: 2 sessions
+1. Data: 3 sessions
+1. Compute: 3 sessions
+1. I/O: 3 sessions
+1. Application Interaction: 1 session
+
+The current directory stores the first 5 lab sessions (out of 12).
+Each lab session is aimed to take 100 minutes.
+50 minutes are planned for teaching assistant-supported demos, and the others for individual work (some time team work) during the lab with the support of the teaching assistant.
+AI use is not encouraged during the lab, as we want students to gain skills by doing "manual" work, i.e. writing and building programs themselves.
+
+There are three types of exercises in the lab:
+1. Demo exercises: to be done together with the teaching assistant during the lab (estimated time: 50 minutes)
+2. Normal exercises: to be done individually or in teams, with support and validation from the teaching assistant (estimated time: 50 minutes)
+3. Bonus exercises: to be done by those who are quite good and finish the bonus exercises in time; or as homework
+
+Do a critical analysis from an educational perspective of the practical sessions.
+Tell us:
+1. If the content is suited both in term of difficulty, coverage and relevance for the topics.
+2. If the duration is on par with the plan.
+3. If the wording is satisfactory and, considering the psychology and typical habits of people around 20 years old, the wording and presentation is suitable.
+4. If there is a need for visual cues, diagrams or references.
+5. ANy other improvements related to structure, contents, format, presentation.
+
+Dump the feedback in a file called fable-feedback.md.
