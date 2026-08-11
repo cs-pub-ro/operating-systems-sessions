@@ -98,9 +98,6 @@ python3 -c "print('A' * 200)" | valgrind ./vuln
 
 You should see the program complete normally, printing your (truncated) input back, with no "Invalid write" and no crash.
 
-If you get stuck on locating or performing the patch, `solutions/bonus-binary-issue/` in this repository has the original source, a full write-up of the bug and the disassembly, and a working patch script — but the point of this exercise is to get there from the binary alone, the way you would have to for a piece of software you did not write and cannot rebuild.
-Try that first.
-
 ## Why this matters
 
 Most of this session has been about *source-level* debugging: gdb and Valgrind pointing you at a line of C you can read and fix.

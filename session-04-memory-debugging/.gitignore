@@ -1,9 +1,6 @@
 db
-db-sol
 histogram
-histogram-sol
 longest
-longest-sol
 core
 core.*
 vgcore.*

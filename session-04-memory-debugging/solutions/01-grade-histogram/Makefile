@@ -3,7 +3,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -O0
 
-# Default target: build the program you have to debug.
 histogram: main.c
 	$(CC) $(CFLAGS) -o histogram main.c
 

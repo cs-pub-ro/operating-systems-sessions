@@ -4,8 +4,8 @@
  * The bug was in record_grade(): a grade of 100 produced bucket index 10,
  * one past the end of counts[NBUCKETS]. See the FIX comment below.
  *
- * Build:  make sol
- * Run:    ./histogram-sol < input.txt
+ * Build:  make
+ * Run:    ./histogram < input.txt
  */
 #include <stdio.h>
 #include <stdlib.h>

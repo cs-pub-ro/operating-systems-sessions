@@ -1,7 +1,8 @@
 /*
  * Reference solution for the bonus (shrinking in-memory database).
  *
- * Build:  gcc -Wall -Wextra -o db solution.c
+ * Build:  make
+ * Run:    ./db < input.txt
  *
  * Commands read from stdin, one per line:
  *     add <id> <name>     add a record

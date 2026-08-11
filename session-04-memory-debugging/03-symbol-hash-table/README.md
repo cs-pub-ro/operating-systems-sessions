@@ -97,8 +97,6 @@ You should see:
 * 11 symbols in the second dump, with `g_retry_limit` gone and every other entry — including its former bucket-mates — intact;
 * from Valgrind: `All heap blocks were freed -- no leaks are possible` and `ERROR SUMMARY: 0 errors from 0 contexts`.
 
-If you get stuck, `solutions/03-symbol-hash-table/` in this repository has a fixed reference implementation with comments explaining each fix — but try to earn the "aha" yourself first with gdb and Valgrind; that is the actual point of the exercise.
-
 ## Why this matters
 
 Every one of these three bugs is invisible to `-Wall -Wextra` and to reading the code top to bottom — each individual line is legal C, and the mistake is only visible when you ask "what is the *lifetime* and *initial state* of this piece of memory, across every path that can reach this line?".

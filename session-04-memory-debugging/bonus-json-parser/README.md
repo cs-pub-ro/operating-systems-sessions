@@ -68,8 +68,6 @@ You should see:
 * the hand-built tree printed correctly;
 * from Valgrind: `ERROR SUMMARY: 0 errors from 0 contexts` — no invalid reads or writes at all.
 
-If you get stuck, `solutions/bonus-json-parser/` in this repository has a fixed reference implementation with a comment explaining the fix — but try to earn the "aha" yourself first with Valgrind; that is the actual point of the exercise.
-
 ## Why this matters
 
 This bug is legal C and passes `-Wall -Wextra` without a single warning.

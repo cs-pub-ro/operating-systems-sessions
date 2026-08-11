@@ -8,8 +8,8 @@
  *   FIX 2 (main)            -- a cached record pointer survived a realloc()
  *   FIX 3 (db_print_sorted) -- the temporary sorted copy was never freed
  *
- * Build:  make sol
- * Run:    ./db-sol < input.txt
+ * Build:  make
+ * Run:    ./db < input.txt
  */
 #include <stdio.h>
 #include <stdlib.h>

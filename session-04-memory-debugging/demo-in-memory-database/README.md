@@ -309,8 +309,7 @@ Use both.
 ## The fix
 
 Never hold a pointer into a buffer that can be reallocated.
-Either copy the data out, or remember the **index** and re-derive the pointer when you need it (`db.records[0]`, always read through the current `db.records`).
-See `solution.c`:
+Either copy the data out, or remember the **index** and re-derive the pointer when you need it (`db.records[0]`, always read through the current `db.records`):
 
 ```c
 if (db.count == 1) {
@@ -387,8 +386,8 @@ A block that is local to one function should be freed on **every** exit path of 
 # Confirming the repair
 
 ```console
-make sol
-valgrind --leak-check=full ./db-sol < input.txt
+make
+valgrind --leak-check=full ./db < input.txt
 ```
 
 ```text
@@ -402,7 +401,6 @@ valgrind --leak-check=full ./db-sol < input.txt
 ```
 
 **"All heap blocks were freed"** plus **"0 errors from 0 contexts"** is the result you should be aiming for in every assignment from now on.
-`solution.c` contains the three fixes, each marked with a `FIX n` comment.
 
 ---
 

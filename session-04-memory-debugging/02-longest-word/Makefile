@@ -7,11 +7,7 @@ CFLAGS = -Wall -Wextra -g -O0
 longest: main.c
 	$(CC) $(CFLAGS) -o longest main.c
 
-# `make sol`: build the reference solution.
-sol: solution.c
-	$(CC) $(CFLAGS) -o longest-sol solution.c
-
 clean:
-	rm -f longest longest-sol
+	rm -f longest
 
-.PHONY: sol clean
+.PHONY: clean

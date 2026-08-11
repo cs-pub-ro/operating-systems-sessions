@@ -5,8 +5,8 @@
  * t->longest with a fresh strdup() without releasing the previous copy, so
  * every intermediate winner was leaked. See the FIX comment below.
  *
- * Build:  make sol
- * Run:    ./longest-sol < input.txt
+ * Build:  make
+ * Run:    ./longest < input.txt
  */
 #include <stdio.h>
 #include <stdlib.h>

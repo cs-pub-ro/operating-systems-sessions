@@ -1,0 +1,11 @@
+add 1 alice
+add 2 bob
+add 3 carol
+add 4 dave
+add 5 erin
+add 6 frank
+del 6
+del 5
+del 4
+add 7 grace
+del 2

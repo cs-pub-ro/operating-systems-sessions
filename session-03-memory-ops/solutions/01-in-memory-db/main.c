@@ -1,7 +1,8 @@
 /*
  * Reference solution for 01-in-memory-db.
  *
- * Build:  gcc -Wall -Wextra -o db solution.c
+ * Build:  make
+ * Run:    ./db < input.txt
  */
 #include <stdio.h>
 #include <stdlib.h>

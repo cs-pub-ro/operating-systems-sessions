@@ -3,11 +3,10 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g -O0
 
-# Default target: build the program you have to debug.
-histogram: main.c
-	$(CC) $(CFLAGS) -o histogram main.c
+longest: main.c
+	$(CC) $(CFLAGS) -o longest main.c
 
 clean:
-	rm -f histogram
+	rm -f longest
 
 .PHONY: clean
