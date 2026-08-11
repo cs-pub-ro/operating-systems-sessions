@@ -1,6 +1,6 @@
 # Exercise: the `nanosleep` system call
 
-Same three-layer pattern as the [write demo](../demo-write-syscall) and the [getpid exercise](../getpid-syscall):
+Same three-layer pattern as the [write demo](../demo-puts-write) and the [getpid exercise](../01-getpid):
 
 ```text
   my_sleep()   -->   my_nanosleep()   -->   my_syscall()   -->   kernel
