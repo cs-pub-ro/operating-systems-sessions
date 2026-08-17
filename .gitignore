@@ -19,3 +19,6 @@ TAGS
 *.pyc
 _site/
 __pycache__/
+
+# checkpatch, fetched by the lint workflow
+.checkpatch/

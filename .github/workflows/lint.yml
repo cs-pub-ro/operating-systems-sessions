@@ -1,0 +1,110 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Third-party sources, imported as they are and not ours to reformat.
+  VENDORED: ':!session-02-os-interface/printf'
+
+jobs:
+  markdown:
+    name: Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Rules live in .markdownlint-cli2.jsonc, and follow content-rules.md.
+      - name: Run markdownlint
+        run: npx --yes markdownlint-cli2@0.23.2 "**/*.md"
+
+  shell:
+    name: Shell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run shellcheck
+        run: |
+          shellcheck --version
+          git ls-files -z '*.sh' '*.bash' | xargs -0 --no-run-if-empty shellcheck --color=always
+
+  checkpatch:
+    name: C style
+    runs-on: ubuntu-latest
+    env:
+      CHECKPATCH: ${{ github.workspace }}/.checkpatch/checkpatch.pl
+      # Rules that are about the kernel rather than about C, plus the string
+      # functions these sessions exist to teach.
+      CHECKPATCH_IGNORE: SPDX_LICENSE_TAG,SPLIT_STRING,STRCPY,STRNCPY,STRLCPY,NEW_TYPEDEFS,VOLATILE,ARRAY_SIZE,CONST_STRUCT,PREFER_KERNEL_TYPES,AVOID_EXTERNS,USE_FUNC,FILE_PATH_CHANGES,GIT_COMMIT_ID,EMAIL_SUBJECT,MISSING_SIGN_OFF
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The whole history, so that the pushed range can be diffed.
+          fetch-depth: 0
+
+      - name: Fetch checkpatch
+        run: |
+          mkdir -p .checkpatch
+          scripts=https://raw.githubusercontent.com/torvalds/linux/v6.12/scripts
+          for file in checkpatch.pl spelling.txt const_structs.checkpatch; do
+            curl -sSfL --retry 3 --retry-all-errors -o ".checkpatch/$file" "$scripts/$file"
+          done
+          chmod +x "$CHECKPATCH"
+
+      - name: Work out what changed
+        id: range
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base='${{ github.event.pull_request.base.sha }}'
+          else
+            base='${{ github.event.before }}'
+          fi
+          # A new branch, a force push or a manual run leaves nothing usable:
+          # fall back to the parent of the commit that was pushed.
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2> /dev/null; then
+            base="$(git rev-parse HEAD~1 2> /dev/null || git rev-parse HEAD)"
+          fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "Checking $base..HEAD"
+
+      # Only the lines this push or pull request touches have to be clean, so
+      # that the style is enforced on new code without a tree-wide cleanup.
+      - name: Check the changed C code
+        run: |
+          git diff "${{ steps.range.outputs.base }}" HEAD -- '*.c' '*.h' "$VENDORED" > changes.patch
+          if [ ! -s changes.patch ]; then
+            echo "No C code changed."
+            exit 0
+          fi
+          "$CHECKPATCH" --no-tree --no-signoff --show-types \
+            --ignore "$CHECKPATCH_IGNORE" - < changes.patch
+
+      # The rest of the tree is reported, not enforced: the findings land in the
+      # run summary, and can be worked through a session at a time.
+      - name: Report on the whole tree
+        if: always()
+        run: |
+          git ls-files -z '*.c' '*.h' "$VENDORED" | xargs -0 --no-run-if-empty \
+            "$CHECKPATCH" --no-tree --terse --show-types \
+            --ignore "$CHECKPATCH_IGNORE" --file > findings.txt || true
+          {
+            echo '## checkpatch, whole tree'
+            echo
+            echo "$(grep -c . findings.txt || true) lines, reported only."
+            echo
+            echo '```text'
+            cat findings.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

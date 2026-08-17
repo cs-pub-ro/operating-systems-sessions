@@ -1,5 +1,7 @@
 # Rules for Content
 
+Most of the Markdown rules below are enforced by markdownlint, see the *Linting* section of the [repository README](README.md).
+
 ## Markdown
 
 * Use `*` instead of `-` as a way to list items in unordered lists
