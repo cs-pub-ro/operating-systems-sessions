@@ -1,0 +1,99 @@
+name: Archive Labs on Commit
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      # Any change to a session, and any change to how archives are built.
+      - 'session-*/**'
+      - 'scripts/gen_zip.py'
+      - 'scripts/sessions.py'
+      - '.github/workflows/lab-archive.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lab-archives
+  cancel-in-progress: false
+
+env:
+  ARCHIVE_BRANCH: lab-archives
+
+jobs:
+  archive-labs:
+    name: Build and publish the lab archives
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Written outside the working tree, so that switching branches below
+      # cannot disturb them and they cannot end up in a commit by accident.
+      - name: Build the archives
+        run: python3 scripts/gen_zip.py --output "$RUNNER_TEMP/archives"
+
+      - name: Publish them to the ${{ env.ARCHIVE_BRANCH }} branch
+        run: |
+          set -eu
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # The branch holds only the archives, so it has a history of its own,
+          # unrelated to master.
+          if git ls-remote --exit-code --heads origin "$ARCHIVE_BRANCH" > /dev/null; then
+            git fetch --depth 1 origin "$ARCHIVE_BRANCH"
+            git checkout -B "$ARCHIVE_BRANCH" FETCH_HEAD
+          else
+            echo "Creating $ARCHIVE_BRANCH."
+            git checkout --orphan "$ARCHIVE_BRANCH"
+          fi
+          # Whatever the branch was carrying: on a fresh orphan branch this is
+          # the whole of master, staged by the checkout.
+          git rm -rq --cached . --ignore-unmatch
+
+          rm -f ./*.zip
+          cp "$RUNNER_TEMP"/archives/*.zip .
+
+          # `-A` with a pathspec so that an archive of a session that has been
+          # renamed or removed is staged as a deletion, and `-f` because the
+          # repository ignores `*.zip` -- here they are the point of the branch.
+          git add -Af -- '*.zip'
+          if git diff --cached --quiet; then
+            echo "The archives are unchanged; nothing to publish."
+            exit 0
+          fi
+
+          git commit -m "Update lab archives for ${GITHUB_SHA:0:7}"
+          git push origin "$ARCHIVE_BRANCH"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo '## Lab archives'
+            echo
+            if [ -d "$RUNNER_TEMP/archives" ]; then
+              echo '| archive | size | files |'
+              echo '| --- | ---: | ---: |'
+              for zip in "$RUNNER_TEMP"/archives/*.zip; do
+                printf '| `%s` | %s | %s |\n' \
+                  "$(basename "$zip")" \
+                  "$(du -h "$zip" | cut -f1)" \
+                  "$(unzip -Z1 "$zip" | wc -l)"
+              done
+              echo
+              echo "Published to the \`$ARCHIVE_BRANCH\` branch."
+            else
+              echo 'No archives were built.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

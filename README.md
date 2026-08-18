@@ -8,6 +8,12 @@ Each session has its own directory, comprising items both for lectures and for l
 The contents of this repository are published as a website, built with MkDocs from the `README.md` files stored here.
 The generator lives in the `scripts/` directory, see [`scripts/README.md`](scripts/README.md) for details.
 
+## Lab archives
+
+Each session is packed into a zip archive of its tasks, without the reference solutions, and published on the `lab-archives` branch.
+The `.github/workflows/lab-archive.yml` workflow rebuilds them on every push to `master` that touches a session.
+Build them locally with `python3 scripts/gen_zip.py`; see [`scripts/README.md`](scripts/README.md) for what goes in and how to create the branch the first time.
+
 ## Linting
 
 The `.github/workflows/lint.yml` workflow checks style on every push and every pull request.

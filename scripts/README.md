@@ -1,9 +1,18 @@
-# Website
+# Scripts
+
+Two things are generated from the repository tree, and both live here:
+
+* `gen_pages.py` builds the [website](#website)
+* `gen_zip.py` builds the [lab archives](#lab-archives) handed to students
+
+Both ask `sessions.py` what a session is and what a task is, so the site and the archives can never disagree about it.
+
+## Website
 
 The repository is published as a static website through GitHub Pages.
 The site is built with [MkDocs](https://www.mkdocs.org/) and the [Material](https://squidfunk.github.io/mkdocs-material/) theme, and deployed by the `.github/workflows/pages.yml` workflow on every push to `master`.
 
-## Structure
+### Structure
 
 The site mirrors the repository layout, in three levels:
 
@@ -11,7 +20,7 @@ The site mirrors the repository layout, in three levels:
 1. a session page lists every task in that session, such as `01-string-functions`
 1. a task page renders that task's `README.md`
 
-## Contents
+### Contents
 
 There are no pages stored in this repository.
 `gen_pages.py` discovers everything at build time, by walking the directory tree, and hands the pages to MkDocs through the `mkdocs-gen-files` plugin.
@@ -21,7 +30,7 @@ The navigation sidebar is generated the same way, as a `SUMMARY.md` read back by
 * A task is any directory below a session that contains a `README.md` file.
   Nested tasks, such as `demo-copy-file/malloc`, are listed with their path relative to the session.
 * Directories named `solutions` are skipped, together with `.git`, `.github`, `docs`, `scripts` and `site`.
-  The list is the `EXCLUDED_DIRS` set in `gen_pages.py`.
+  The list is the `EXCLUDED_DIRS` set in `sessions.py`.
 * The title shown next to a task is the first level-one heading of its `README.md`.
   If the file has no heading, the directory name is used instead, and the heading is added to the page.
 * Links between READMEs, such as `../demo-puts-write`, are rewritten to point at the generated pages.
@@ -32,7 +41,7 @@ The `README.md` files need no front matter and no other metadata.
 
 The `docs/` directory only exists because MkDocs insists on one; every page is generated.
 
-## Building locally
+### Building locally
 
 Install the dependencies, then build the site into `_site/`:
 
@@ -47,8 +56,86 @@ Better, while writing: serve the site at <http://localhost:8000> and rebuild on 
 mkdocs serve
 ```
 
-## Enabling GitHub Pages
+### Enabling GitHub Pages
 
 The workflow deploys the site, but the repository has to allow it first.
 In the repository settings, under *Pages*, set *Source* to *GitHub Actions*.
 The site is then published at `https://<owner>.github.io/<repository>/`.
+
+## Lab archives
+
+Every session is packed into one zip archive of its tasks, published on the `lab-archives` branch, which holds nothing else.
+The archives are what students download, so they contain the tasks and nothing more: the reference solutions under `solutions/`, and the challenge flags that live beside them, are left out.
+
+The `.github/workflows/lab-archive.yml` workflow rebuilds and republishes them on every push to `master` that touches a session, and can also be run by hand from the *Actions* tab.
+
+### Contents
+
+An archive unpacks into a single directory named after the session:
+
+```text
+session-03-memory-ops.zip
+└── session-03-memory-ops/
+    ├── 01-in-memory-db/
+    ├── bonus-in-mem-database/
+    └── demo-copy-file/{global-buffer,malloc,mmap}/
+```
+
+* A task is the same thing the website calls a task, decided by `sessions.py`: any directory below a session that has a `README.md`, `solutions/` excluded.
+* Only files tracked by git are packed, so an object file or a compiled binary left in the working tree is never shipped by accident.
+  The archives are the same whether they are built from a clean checkout or from the tree you have been working in.
+* Files named `prompt.txt`, the notes the exercises were written from, are left out; several of them describe the solution.
+  The list is the `EXCLUDED_FILES` tuple in `gen_zip.py`.
+* Archives are byte-for-byte reproducible: entries are sorted and timestamps are fixed.
+  Editing one task therefore changes that one archive, and the workflow commits nothing at all when no content has changed.
+
+### Building locally
+
+```console
+python3 scripts/gen_zip.py
+```
+
+The archives are written to `archives/`, which is ignored by git.
+Nothing has to be installed: the script only needs Python and git.
+Check what a student would get with:
+
+```console
+unzip -l archives/session-03-memory-ops.zip
+```
+
+### Creating the branch for the first time
+
+The workflow creates the `lab-archives` branch itself, so the simplest way is to open the *Actions* tab, pick *Archive Labs on Commit* and run it on `master`.
+
+To do the same by hand, build the archives and commit them onto a fresh orphan branch.
+The commands below use a temporary worktree, so your own working tree is left alone:
+
+```console
+python3 scripts/gen_zip.py --output /tmp/lab-archives
+git worktree add --detach /tmp/archives-branch
+cd /tmp/archives-branch
+git checkout --orphan lab-archives
+git rm -rq --cached .
+cp /tmp/lab-archives/*.zip .
+git add -f *.zip
+git commit -m "Add the initial lab archives"
+git push -u origin lab-archives
+```
+
+Then go back and remove the temporary worktree:
+
+```console
+cd -
+git worktree remove --force /tmp/archives-branch
+```
+
+The `-f` on `git add` is needed because the repository ignores `*.zip`, which on this branch is exactly what we want to commit.
+From here on the workflow keeps the branch up to date on its own.
+
+### Downloading an archive
+
+A file on a branch is served by GitHub at a URL of this shape:
+
+```text
+https://github.com/<owner>/<repository>/raw/lab-archives/session-03-memory-ops.zip
+```

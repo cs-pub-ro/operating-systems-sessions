@@ -17,12 +17,22 @@ the directory tree at build time.
 """
 
 import re
+import sys
 from pathlib import Path
 
 import mkdocs_gen_files
 from mkdocs.structure.files import InclusionLevel
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+# The plugin runs this script from the repository root, so the directory it
+# lives in is not on the path yet.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from sessions import (  # noqa: E402  (the path has to be set up first)
+    EXCLUDED_DIRS,
+    REPO_ROOT,
+    SESSION_PATTERN,
+    find_sessions,
+)
 
 SITE_TITLE = "Operating Systems"
 SITE_TAGLINE = "Session materials for the Operating Systems class"
@@ -34,23 +44,6 @@ NAV_FILE = "SUMMARY.md"
 # are sent instead.
 REPO_BLOB_URL = "https://github.com/cs-pub-ro/operating-systems-sessions/blob/master"
 
-# Directory names that never become pages, at any depth.
-EXCLUDED_DIRS = {".git", ".github", ".claude", "_site", "docs", "scripts", "site", "solutions"}
-
-# Top-level directories that are treated as sessions.
-SESSION_PATTERN = re.compile(r"^session-\d+")
-
-# Words that plain title casing would get wrong when building a label out of a
-# directory name.
-ACRONYMS = {
-    "os": "OS",
-    "io": "IO",
-    "db": "DB",
-    "gdb": "GDB",
-    "json": "JSON",
-    "cylab": "CyLab",
-}
-
 # A Markdown link target: the `](target)` part, with an optional title.
 LINK_PATTERN = re.compile(r"(?<=\]\()([^)\s]+)(?=(?:\s+\"[^\"]*\")?\))")
 
@@ -59,22 +52,6 @@ FENCE_PATTERN = re.compile(r"(^```[\s\S]*?^```[^\n]*$)", re.MULTILINE)
 
 # A URL scheme, a page anchor, or a site-absolute path: left alone.
 EXTERNAL_PATTERN = re.compile(r"^(?:[a-z][a-z0-9+.-]*:|#|/|<)", re.IGNORECASE)
-
-
-def prettify(name):
-    """Turn a directory name such as `01-string-functions` into a label."""
-    without_prefix = re.sub(r"^(?:session-\d+|\d+|bonus|demo)[-_]", "", name)
-    words = re.split(r"[-_]+", without_prefix.strip())
-    return " ".join(ACRONYMS.get(word.lower(), word.title()) for word in words if word)
-
-
-def read_title(readme_path, fallback):
-    """Return the first level-one heading of a README, or a fallback."""
-    for line in readme_path.read_text(encoding="utf-8").splitlines():
-        match = re.match(r"^#\s+(.*\S)\s*$", line)
-        if match:
-            return match.group(1)
-    return fallback
 
 
 def is_page(path):
@@ -133,41 +110,6 @@ def rewrite_links(text, readme_dir):
         else LINK_PATTERN.sub(lambda m: rewrite_target(m.group(0), readme_dir), part)
         for part in parts
     )
-
-
-def find_tasks(session_dir):
-    """Every directory below a session that holds a README, depth-first."""
-    tasks = []
-    for readme in sorted(session_dir.rglob("README.md")):
-        relative = readme.relative_to(session_dir).parent
-        if relative == Path("."):
-            continue
-        if any(part in EXCLUDED_DIRS for part in relative.parts):
-            continue
-        tasks.append(
-            {
-                "slug": relative.as_posix(),
-                "readme": readme,
-                "title": read_title(readme, prettify(relative.name)),
-            }
-        )
-    return tasks
-
-
-def find_sessions(repo_root):
-    """Every session directory in the repository, in name order."""
-    sessions = []
-    for entry in sorted(repo_root.iterdir()):
-        if not entry.is_dir() or not SESSION_PATTERN.match(entry.name):
-            continue
-        sessions.append(
-            {
-                "slug": entry.name,
-                "label": prettify(entry.name),
-                "tasks": find_tasks(entry),
-            }
-        )
-    return sessions
 
 
 def write(path, text):
@@ -236,7 +178,7 @@ def build_nav(sessions):
 
 
 def main():
-    sessions = find_sessions(REPO_ROOT)
+    sessions = find_sessions()
     if not sessions:
         raise SystemExit("no session directories found")
 
