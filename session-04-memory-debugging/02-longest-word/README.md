@@ -1,95 +1,33 @@
-# Exercise 2: the program that is right and still broken
+# Exercise: the program that is right and still broken
 
-`main.c` reads whitespace-separated words from standard input and reports how many there were and which one was the longest:
+`main.c` reads words from standard input and reports how many there were and which one was the longest.
+The answer it prints is correct, it never crashes, and `-Wall -Wextra` says nothing.
+
+## Reproduce
 
 ```console
 make
-./longest < input.txt
-```
-
-```text
-read 21 words
-longest word: extraordinarily (15 characters)
-```
-
-That is the correct answer.
-There is no crash, no warning from `-Wall -Wextra`, and no wrong number anywhere.
-If the only thing you ever checked was the output, you would ship this.
-
-## Look at it with Valgrind
-
-```console
 valgrind --leak-check=full ./longest < input.txt
 ```
 
-Read the report and answer these questions before touching the code:
+The program keeps exactly one string on the heap — the longest word seen so far — and `main()` frees it at the end.
+Valgrind still reports bytes *definitely lost*, which means that at exit no pointer to that memory existed anywhere.
 
-* How many blocks were allocated, and how many were freed?
-* How many bytes are **definitely lost**, in how many blocks?
-* Which function allocated them, and on which line?
-  (The stack trace under the leak report is the *allocation* site: where the memory was born, not where it was lost.)
+## Your tasks
 
-Then find the reason.
-The program keeps exactly one string on the heap at a time — the longest word seen so far — and `main()` does `free()` it at the end.
-So why is more than one block still outstanding when the program exits?
+1. Find the leak.
+   Count how many words in the input are longer than every word before them: that is how many heap copies the program makes.
+   A pointer variable holds one address, so ask what happens to the address that was in it when a new one is assigned on top.
+1. Fix it, keeping the output identical.
+   The struct owns the string it points to, so the old string has to be released before the pointer is overwritten.
+1. Check your work, corner cases included:
 
-Two hints, if you need them:
+    ```console
+    valgrind --leak-check=full ./longest < input.txt
+    printf 'aaa\n' | ./longest
+    printf '' | ./longest
+    printf 'zz\naaa\nbbbb\naaaaa\n' | ./longest
+    ```
 
-* Count how many times a word in the input is longer than every word before it — that is how many heap copies the program makes.
-  All but one of them left something behind.
-* A pointer variable holds exactly one address.
-  Ask what happens to the address that was in it a moment ago, when a new one is assigned on top.
-
-## What "definitely lost" means
-
-Valgrind sorts unfreed memory into categories, and the difference matters:
-
-| Category | Meaning |
-|----------|---------|
-| **definitely lost** | at exit, no pointer to this block existed anywhere — it could never have been freed. A real leak; fix it. |
-| **indirectly lost** | the block was only reachable through a definitely-lost one (e.g. the nodes hanging off a leaked list head). Fixing the parent usually fixes these too. |
-| **possibly lost** | only a pointer to the *middle* of the block still existed. Sometimes fine, usually worth a look. |
-| **still reachable** | you still had a pointer to it at exit but never freed it. Not a runaway leak, but sloppy: it hides real leaks in the noise, so free it anyway. |
-
-## Your task
-
-1. Identify the leak with Valgrind.
-1. Fix it, keeping the program's output identical.
-   The rule to apply: **the struct owns the string it points to.** Overwriting an owning pointer without releasing what it pointed to first drops the only reference to that block — after that, no code in the universe can free it.
-1. Check your work:
-
-```console
-valgrind --leak-check=full ./longest < input.txt
-```
-
-```text
-==2745183== HEAP SUMMARY:
-==2745183==     in use at exit: 0 bytes in 0 blocks
-==2745183==   total heap usage: 6 allocs, 6 frees, 8,225 bytes allocated
-==2745183==
-==2745183== All heap blocks were freed -- no leaks are possible
-==2745183==
-==2745183== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-```
-
-Same allocation count as before, but every block now has a matching `free`.
-
-Also make sure you did not break the corner cases, which is easy to do while juggling `free`:
-
-```console
-printf 'aaa\n' | ./longest                 # one word, one allocation
-printf '' | ./longest                      # no words at all: free(NULL) is legal
-printf 'zz\naaa\nbbbb\naaaaa\n' | ./longest  # a new winner every time
-```
-
-Run each of them under Valgrind too.
-`free(NULL)` is explicitly allowed by the standard and does nothing, so the empty case needs no special handling — but a *double* free of the same non-NULL pointer is undefined behaviour, and Valgrind will report it loudly as an "Invalid free".
-
-## Takeaway
-
-This program was *observably correct*.
-The leak is small — 17 bytes — and on a short input it is harmless; the kernel reclaims everything when the process exits anyway.
-Now imagine the same function inside a service that processes words for months without restarting.
-
-That is why "it prints the right thing" is not a definition of correctness in C, and why running Valgrind should be as automatic as compiling.
-Make `valgrind --leak-check=full` part of how you test every assignment, not something you reach for after a crash.
+Every run must end at `All heap blocks were freed` with 0 errors.
+`free(NULL)` is legal and does nothing, so the empty input needs no special case — but freeing the same pointer twice is undefined behaviour, and Valgrind reports it as an invalid free.

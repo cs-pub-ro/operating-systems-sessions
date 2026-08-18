@@ -1,9 +1,8 @@
 # Exercise: a growable in-memory database
 
-In this exercise you build a tiny **in-memory database** that lives entirely on the heap.
-Records are read from **standard input**, stored in a dynamically allocated array, and printed back out at the end.
-
-The interesting part is memory management: you never know in advance how many records the user will type, so the array has to **grow on demand** using `malloc`/`realloc`.
+`main.c` reads records from standard input into a heap array and prints them back at the end.
+You never know in advance how many records there will be, so the array has to grow on demand.
+You write that part.
 
 ## The data model
 
@@ -11,8 +10,8 @@ A record is a single row with two fields:
 
 ```c
 struct record {
-	int id;
-	char name[NAME_LEN];   /* NAME_LEN == 32 */
+       int id;
+       char name[NAME_LEN];   /* NAME_LEN == 32 */
 };
 ```
 
@@ -20,9 +19,9 @@ The database is just a heap array of records plus a bit of bookkeeping:
 
 ```c
 struct database {
-	struct record *records;   /* heap array of `capacity` records */
-	size_t count;             /* records currently in use         */
-	size_t capacity;          /* records the array can hold        */
+       struct record *records;   /* heap array of `capacity` records */
+       size_t count;             /* records currently in use         */
+       size_t capacity;          /* records the array can hold        */
 };
 ```
 
@@ -45,51 +44,26 @@ add "5 erin":   full -> grow        capacity = 8                (realloc)
                 store, count -> 5
 ```
 
-Because `realloc(NULL, size)` behaves exactly like `malloc(size)`, the *same* "grow when full" code handles both the very first allocation and every later expansion — you do not need a separate special case for the empty database.
-
 ## Your tasks
 
 Open `main.c` and complete the three TODOs:
 
-1. **`db_init()`** — start from an empty database: `records = NULL`, `count = 0`, `capacity = 0`.
+1. **`db_init()`** — start empty: `records = NULL`, `count = 0`, `capacity = 0`.
+1. **`db_add()`** — if `count == capacity`, grow the array by `CHUNK` records with `realloc` and check the result for `NULL`.
+   Then copy the record into the slot at index `count` and increment `count`.
+1. **`db_free()`** — free the array and reset the fields.
 
-1. **`db_add()`** — the heart of the exercise:
-   * if `count == capacity`, grow the array by `CHUNK` records with `realloc` and check the result for `NULL`;
-   * copy the `id` and `name` into the slot at index `count` (use `strncpy` and keep the string NUL-terminated);
-   * increment `count`.
-
-1. **`db_free()`** — `free` the array and reset the fields so the database is empty again.
-
-`db_print()` and `main()` are already written for you.
+`realloc(NULL, size)` does the same thing as `malloc(size)`, so the same "grow when full" code also covers the very first allocation.
 
 ## Build
 
 ```console
-gcc -Wall -Wextra -o db main.c
+make
 ```
 
 ## Run
 
-Type records and finish with **Ctrl-D**:
-
-```console
-./db
-1 alice
-2 bob
-3 carol
-<Ctrl-D>
-```
-
-Expected output:
-
-```text
-Database holds 3 record(s) (capacity 4):
-  [1] alice
-  [2] bob
-  [3] carol
-```
-
-Or pipe input from a file / a here-string to force several reallocations:
+Type records and finish with Ctrl-D, or pipe them in:
 
 ```console
 printf '1 alice\n2 bob\n3 carol\n4 dave\n5 erin\n' | ./db
@@ -104,17 +78,12 @@ Database holds 5 record(s) (capacity 8):
   [5] erin
 ```
 
-Notice how `capacity` jumps from 4 to 8 the moment the 5th record arrives.
+Note how the capacity jumps from 4 to 8 the moment the fifth record arrives.
 
 ## Check your work
-
-Run under Valgrind to confirm every byte you `malloc`/`realloc` is freed and that you never read or write out of bounds:
 
 ```console
 valgrind --leak-check=full ./db < input.txt
 ```
 
-A correct solution reports **0 errors** and **all heap blocks freed**.
-
-> **Bonus (optional):** print a message inside `db_add()` every time the array grows, e.g. `grew capacity to 8`.
-> Feed the program many records and watch how rarely reallocations actually happen — that is the whole point of growing in chunks instead of one element at a time.
+A correct solution reports 0 errors and all heap blocks freed.
