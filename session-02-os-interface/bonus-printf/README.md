@@ -2,7 +2,7 @@
 
 ## Overview
 
-The [`printf/`](../printf/) directory contains a self-contained, portable `printf` implementation ([mpaland/printf](https://github.com/mpaland/printf)).
+The [`printf/`](./printf/) directory contains a self-contained, portable `printf` implementation ([mpaland/printf](https://github.com/mpaland/printf)).
 Unlike the standard libc `printf`, it does **not** know how to write to the terminal by itself.
 Instead it delegates every output character to a single hook that *you* must provide:
 

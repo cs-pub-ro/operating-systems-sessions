@@ -1,4 +1,4 @@
-#include "../printf/printf.h"
+#include "./printf/printf.h"
 
 int main(void)
 {

@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -Wextra -g
 
-PRINTF_DIR = ../printf
+PRINTF_DIR = printf
 
 .PHONY: all clean
 

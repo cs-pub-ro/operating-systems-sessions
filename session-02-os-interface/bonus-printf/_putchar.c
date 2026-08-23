@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-#include "../printf/printf.h"
+#include "./printf/printf.h"
 
 /*
  * TODO: implement _putchar().
