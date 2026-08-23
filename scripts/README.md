@@ -16,7 +16,7 @@ The site is built with [MkDocs](https://www.mkdocs.org/) and the [Material](http
 
 The site mirrors the repository layout, in three levels:
 
-1. the front page lists every session directory, such as `session-01-software-stack`
+1. the front page lists every session directory, such as `01-software-stack-work`
 1. a session page lists every task in that session, such as `01-string-functions`
 1. a task page renders that task's `README.md`
 
@@ -26,7 +26,8 @@ There are no pages stored in this repository.
 `gen_pages.py` discovers everything at build time, by walking the directory tree, and hands the pages to MkDocs through the `mkdocs-gen-files` plugin.
 The navigation sidebar is generated the same way, as a `SUMMARY.md` read back by the `mkdocs-literate-nav` plugin.
 
-* A session is any top-level directory whose name starts with `session-` followed by a number.
+* A session is a top-level `NN-<name>-work/` directory: the student-facing side of the lab.
+  Its `NN-<name>-full-contents/` sibling holds the reference material — solutions, and for session 05 the challenge flags and exploits — and is deliberately not a session, so it is never published on the site and never packed into an archive. This is the successor to the old `solutions/` convention. The rule is `SESSION_PATTERN` in `sessions.py` (the legacy `session-NN-*` form is still recognised).
 * A task is any directory below a session that contains a `README.md` file.
   Nested tasks, such as `demo-copy-file/malloc`, are listed with their path relative to the session.
 * Directories named `solutions` are skipped, together with `.git`, `.github`, `docs`, `scripts` and `site`.
@@ -64,28 +65,30 @@ The site is then published at `https://<owner>.github.io/<repository>/`.
 
 ## Lab archives
 
-Every session is packed into one zip archive of its tasks, published on the `lab-archives` branch, which holds nothing else.
-The archives are what students download, so they contain the tasks and nothing more: the reference solutions under `solutions/`, and the challenge flags that live beside them, are left out.
+Every session's `-work/` directory is packed into one zip archive of its tasks, published on the `lab-archives` branch, which holds nothing else.
+The archives are what students download, so they contain the tasks and nothing more: the `NN-<name>-full-contents/` reference material — solutions, and the session 05 flags and exploits — is never packed.
 
 The `.github/workflows/lab-archive.yml` workflow rebuilds and republishes them on every push to `master` that touches a session, and can also be run by hand from the *Actions* tab.
 
 ### Contents
 
-An archive unpacks into a single directory named after the session:
+An archive is named after the session with the `-work` suffix stripped, and unpacks into a single directory of that name:
 
 ```text
-session-03-memory-ops.zip
-└── session-03-memory-ops/
+03-memory-ops.zip
+└── 03-memory-ops/
     ├── 01-in-memory-db/
     ├── bonus-in-mem-database/
     └── demo-copy-file/{global-buffer,malloc,mmap}/
 ```
 
-* A task is the same thing the website calls a task, decided by `sessions.py`: any directory below a session that has a `README.md`, `solutions/` excluded.
+* A task is the same thing the website calls a task, decided by `sessions.py`: any directory below a session's `-work/` tree that has a `README.md`.
+  A file shared by a task and a nested sub-task (such as the vendored `bonus-printf/printf/` tree) is packed exactly once.
 * Only files tracked by git are packed, so an object file or a compiled binary left in the working tree is never shipped by accident.
   The archives are the same whether they are built from a clean checkout or from the tree you have been working in.
 * Files named `prompt.txt`, the notes the exercises were written from, are left out; several of them describe the solution.
   The list is the `EXCLUDED_FILES` tuple in `gen_zip.py`.
+* As a last line of defence, packing aborts outright if any file from a `-full-contents/` tree ever reaches an archive; `gen_zip.py`'s `is_reference()` is the guard.
 * Archives are byte-for-byte reproducible: entries are sorted and timestamps are fixed.
   Editing one task therefore changes that one archive, and the workflow commits nothing at all when no content has changed.
 
@@ -100,7 +103,7 @@ Nothing has to be installed: the script only needs Python and git.
 Check what a student would get with:
 
 ```console
-unzip -l archives/session-03-memory-ops.zip
+unzip -l archives/03-memory-ops.zip
 ```
 
 ### Creating the branch for the first time
@@ -137,5 +140,5 @@ From here on the workflow keeps the branch up to date on its own.
 A file on a branch is served by GitHub at a URL of this shape:
 
 ```text
-https://github.com/<owner>/<repository>/raw/lab-archives/session-03-memory-ops.zip
+https://github.com/<owner>/<repository>/raw/lab-archives/03-memory-ops.zip
 ```

@@ -24,6 +24,6 @@ Most of the Markdown rules below are enforced by markdownlint, see the *Linting*
   Markdown rendering engine will increment the number appropriately.
   And it's more maintainable: we only use `1.`; when inserting a new item we will use `1.`; otherwise we would have to do renumbering.
 * For ordered and unordered list items make sure there is exactly one space between the list items preffix (`1.` for ordered lists and `*` for unordered lists) and the contents of the list item.
-* When you have a list of items as bold topical items (such as **Duration**, **Platform**, **Difficulty**) be sure to either mark them as unordered list items or separate them with a blank line.
+* When you have a list of items as bold topical items (such as **Tools**, **Platform**) be sure to either mark them as unordered list items or separate them with a blank line.
   Otherwise, they will be rendered all in one line.
   Markdown rendering engines coallesce sequential lines in the Markdown file (i.e. not separated by a blank line) into a single rendered line.

@@ -1,6 +1,0 @@
-/main_static
-/main_dynamic
-/main_fullstatic
-/libmystring.a
-/libmystring.so
-*.o

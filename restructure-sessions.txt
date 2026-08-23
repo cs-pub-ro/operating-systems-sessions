@@ -1,0 +1,118 @@
+We are preparing contents for a class on Operating Systems, part of a 4 year technical university.
+The class is part of the 2nd year, 1ts semester.
+
+The Operating Systems class is a more advanced class, focused on understanding key concepts (memory, processes, threads, synchronization, input-output, networking, the software interface, system calls, privilege domains).
+The practical part is done in C, using low-level components for getting a thorough understanding of the software stack, particularly the lower bits.
+The aim is to have full stack engineering skills required to design, implement, evaluate, maintain, integrate software components in modern computing systems.
+
+The current directory stores the first 5 lab sessions (out of 12).
+Each lab session is aimed to take 100 minutes.
+50 minutes are planned for teaching assistant-supported demos, and the others for individual work (some time team work) during the lab with the support of the teaching assistant.
+AI use is not encouraged during the lab, as we want students to gain skills by doing "manual" work, i.e. writing and building programs themselves.
+
+There are three types of exercises in the lab:
+1. Demo exercises: to be done together with the teaching assistant during the lab (estimated time: 50 minutes)
+   Demo exercises are each implemented in a directory named `demo-<exercise-name>/`.
+   There could be multiple demos, out of which only part of them (maybe only one) are presented during the lab, to fit into 50 minutes.
+2. Normal exercises: to be done individually or in teams, with support and validation from the teaching assistant (estimated time: 50 minutes)
+   Normal exercises are each implemented in a directory named `NN-<exercise-name>/`.
+3. Bonus exercises: to be done by those who are quite good and finish the bonus exercises in time; or as homework
+   Bonus exercises are each implemented in a directory named `bonus-<exercise-name>/`.
+
+Each session is stored into 2 directories:
+- A directory called `NN-<session-name>-work/` stores the contents that are going to be used in the actual live lab session, taking 100 minutes: skeleton code, instructions and hints about solving the exercise, checking the solution, discussion points.
+  The aim of the directory is to challenge students to solve the exercises, and assist them as much as possible without offering the entire solution "on the table", and incentivizing them to discuss with the teaching assistant (to work together on the demo, to ask for clarifications, to validate the correct solving of an exercise, to ask for further information).
+- A directory called `NN-<session-name>-full-contents/` stores the full session contents: full source code (reference solution), full instructions, full information about the exercise, files used in generating the actual work skeleton.
+  Generally, the `NN-<session-name>-full-contents/` directory contains all the contents in the `NN-<session-name>-work/` directory, but without any missing bits, and with full information.
+  The directory is to be used by students after the live session the have a full view of the reference solutions and explanations; and by lab assistants before the live session, to prepare for the lab session, and to be sure they have an understanding of the goals and reference solutions of exercises.
+
+Each of the 2 session directories will store:
+1. A `README.md` file with instructions / information.
+2. Source code files (full solution or skeleton, depending on the directory), including utility scripts.
+3. Build file, generally a `Makefile`.
+4. Support files: executables, image files / diagrams, input files, generator files, deployment files.
+5. A `.gitignore` file to ignore output generated files that shouldn't be part of the repository.
+   Note that binary or any out files that are required to have a specific format, will not be ignored;
+   They will be part of the repository to be used as such.
+
+The structure of a `README.md` file of a normal or bonus exercise in the `NN-<session-name>-work/` directory should be:
+
+---
+# <Type>: <Title>
+
+**Difficulty:** ●●○  **Tools:** GCC, GDB, Valgrind
+
+## Goal            (1-3 sentences: what you will be able to do afterwards)
+## Background      (only what is needed; link out for more)
+## Your Task       (numbered, checkable)
+## Build & Run     (instructions to build and run your work)
+## Check Your Work (validate your work, see if you have a good solution, giving the correct results)
+## Going Further   (Things to try / Check yourself)
+---
+
+Some sections may be missing, if the exercise doesn't require those.
+
+The structure of a `README.md` file of a demo exercise in the `NN-<session-name>-work/` directory should be:
+
+---
+# Demo: Title
+
+... a short paragraph detailing the aim of the demo ...
+
+... a mention that the student will work together with the teaching assistant to operate on given files in the directory to complete the demo ...
+---
+
+The structure of a `README.md` file of any exercise (including demo) in the `NN-<session-name>-full-contents/` directory will have the format of a tutorial:
+
+---
+# <Type>: <Title>
+
+**Tools:** GCC, GDB, Valgrind
+
+## Goal                             (aim of the tutorial)
+## Background                       (general knowledge before working on the tutorial)
+## Build & Run                      (instructions to build and run the tutorial)
+## Results and Explanations         (information about the results and outcome of the tutorial, what do they mean, what bits in the source code are relevant for the result)
+## Going Further                    (further things to try to expand the tutorial)
+## References                       (further information and links)
+---
+
+Some sections may be missing, if the tutorial doesn't require those.
+
+Currently the 5 sessions have the `NN-<session-name>-work/` directory named just `NN-<session-name>/`.
+And the `NN-<session-name>-full-contents/` directory is implemented in the `NN-<session-name>/solutions/` directory.
+Note that some sessions may not be properly organized: the `solutions/` directory may be missing, and the full contents may actually be part of the `NN-<session-name>/` directory, or anything else.
+
+Each exercise directory in a `NN-<session-name>-work/` directory can contain a potential `DISCUSSION.md` file, with information that can be consulted during the live session.
+This file will be part of the `NN-<session-name>-full-contents/` directory, though we expect it's contents to be found in the `## Results and Explanations` section or in the `## References` section.
+
+Each session has a top-level `README.md` file that contains:
+- the learning objectives
+- the order of the tasks and which are core versus optional
+- the estimated time budget per task
+- the prerequisites and required tools
+
+Do the following:
+
+1. Create the two directories `NN-<session-name>-work/` and `NN-<session-name>-full-contents/`.
+   Populate them with appropriate contents from the current `NN-<session-name>/` directory.
+   Adapt contents are required to satisfy the requirements for each exercise directory (demo, normal, bonus) in each of the 2 session directories.
+2. Validate/organize the top-level `README.md` per session.
+   See if it complies with the contents.
+3. Ensure that all content (full source code, full explanations, support files) is located in the `...-full-contents/` directory.
+4. Verify that the `...-work/` directory contains the skeletons, not the complete exercises or solutions.
+5. Ensure that the content of each exercise `README.md` in the `...-work/` directory follows the instructions above.
+6. Ensure that the content of each exercise `README.md` in the `...-full-contents/` directory follows the instructions above.
+7. Keep the `README.md` files for demo exercises in the `...-work/` directory minimal, as instructed above.
+8. Ideally, each exercise `README.md` in the `...-work/` directory should contain fewer than 80 lines.
+   But do not be rigid about this.
+   If it's worth having more lines that would be OK.
+   Key point is not to have too much content that will be keep the student reading and away from doing actual work.
+9. In the exercise `README.md` in the `...-work/` directory, do not include the expected output in the "Check your work" section.
+    Instead, provide a description of the expected output for users to validate and, if necessary, discuss with the teaching assistant.
+    We aim to incentive the student to really understand the output and compare it to the explanation in the `README.md`, rather that doing a mechanical "match".
+    Also we aim to incentive the student to discuss with the teaching assistant and validate the output.
+10. Add a `DISCUSSION.md` file where appropriate.
+11. Solve exercises, verify that the skeleton in `...-work/` is correct, verify that the solution in the `...-full-contents/` directory is correct and ensure that the instructions in `README.md` are appropriate.
+
+If you have any questions while analyzing the contents of the session, and while doing the tasks above, ask.

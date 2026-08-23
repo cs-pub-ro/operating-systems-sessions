@@ -28,7 +28,15 @@ EXCLUDED_DIRS = {
 }
 
 # Top-level directories that are treated as sessions.
-SESSION_PATTERN = re.compile(r"^session-\d+")
+#
+# A session is the student-facing `NN-<name>-work/` directory: the skeletons,
+# tasks and hints used during the live lab.  Its sibling `NN-<name>-full-contents/`
+# is the reference material -- solutions, and for session 05 the challenge flags
+# and exploits -- and is deliberately *not* a session: it is neither published
+# on the website nor packed into a student archive, exactly as the old
+# `solutions/` directories never were.  The legacy `session-NN-*` form is still
+# recognised so nothing breaks if such a directory reappears.
+SESSION_PATTERN = re.compile(r"^(?:session-\d+|\d+-.+-work$)")
 
 # Words that plain title casing would get wrong when building a label out of a
 # directory name.
@@ -45,6 +53,9 @@ ACRONYMS = {
 def prettify(name):
     """Turn a directory name such as `01-string-functions` into a label."""
     without_prefix = re.sub(r"^(?:session-\d+|\d+|bonus|demo)[-_]", "", name)
+    # Session directories carry a `-work` / `-full-contents` suffix that is
+    # plumbing, not part of the label.
+    without_prefix = re.sub(r"[-_](?:work|full-contents)$", "", without_prefix)
     words = re.split(r"[-_]+", without_prefix.strip())
     return " ".join(ACRONYMS.get(word.lower(), word.title()) for word in words if word)
 

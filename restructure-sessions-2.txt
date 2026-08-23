@@ -1,0 +1,40 @@
+We are preparing contents for a class on Operating Systems, part of a 4 year technical university.
+The class is part of the 2nd year, 1ts semester.
+
+The Operating Systems class is a more advanced class, focused on understanding key concepts (memory, processes, threads, synchronization, input-output, networking, the software interface, system calls, privilege domains).
+The practical part is done in C, using low-level components for getting a thorough understanding of the software stack, particularly the lower bits.
+The aim is to have full stack engineering skills required to design, implement, evaluate, maintain, integrate software components in modern computing systems.
+
+The current directory stores the first 5 lab sessions (out of 12).
+Each lab session is aimed to take 100 minutes.
+
+Sessions 01-software-stack, 02-os-interface, 03-memory-ops are in the appropriate format.
+Session 04-memory-debugging is only partialy in the approrpiate format.
+Session 05-memory-security is not in the approapriate format.
+
+Complete the transition of session 04-memory-debugging to the approrpiate format used in sessions 01-software-stack, 02-os-interface and 03-memory-ops.
+In particular be sure to:
+
+1. Create the two directories `NN-<session-name>-work/` and `NN-<session-name>-full-contents/`.
+   Populate them with appropriate contents from the current `NN-<session-name>/` directory.
+   Adapt contents are required to satisfy the requirements for each exercise directory (demo, normal, bonus) in each of the 2 session directories.
+2. Validate/organize the top-level `README.md` per session.
+   See if it complies with the contents.
+3. Ensure that all content (full source code, full explanations, support files) is located in the `...-full-contents/` directory.
+4. Verify that the `...-work/` directory contains the skeletons, not the complete exercises or solutions.
+5. Ensure that the content of each exercise `README.md` in the `...-work/` directory follows the instructions above.
+6. Ensure that the content of each exercise `README.md` in the `...-full-contents/` directory follows the instructions above.
+7. Keep the `README.md` files for demo exercises in the `...-work/` directory minimal, as instructed above.
+8. Ideally, each exercise `README.md` in the `...-work/` directory should contain fewer than 80 lines.
+   But do not be rigid about this.
+   If it's worth having more lines that would be OK.
+   Key point is not to have too much content that will be keep the student reading and away from doing actual work.
+9. In the exercise `README.md` in the `...-work/` directory, do not include the expected output in the "Check your work" section.
+   Instead, provide a description of the expected output for users to validate and, if necessary, discuss with the teaching assistant.
+   We aim to incentive the student to really understand the output and compare it to the explanation in the `README.md`, rather that doing a mechanical "match".
+   Also we aim to incentive the student to discuss with the teaching assistant and validate the output.
+10. Add that as a `FURTHER.md` file with further information related to the exercise in the `...-work/` directory. Add a correspnding `FURTHER.md` file in the `...-full-contents/` directory as well, some items may already be part of the `README.md` file.
+11. Any teacher / teaching assistant-specific content from the `README.md` top-level session file or the `README.md` fil in the exercise directory in the `...-full-contents/` directory, should go into an `INSTRUCTOR.md` file.
+12. Solve exercises, verify that the skeleton in `...-work/` is correct, verify that the solution in the `...-full-contents/` directory is correct and ensure that the instructions in `README.md` are appropriate.
+
+If you have any questions while analyzing the contents of the session, and while doing the tasks above, ask.

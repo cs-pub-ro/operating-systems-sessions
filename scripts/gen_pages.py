@@ -8,8 +8,8 @@ so nothing appears on disk and the repository stays as it is.
 The site mirrors the repository layout, in three levels:
 
     index.md                                 front page, lists every session
-    session-01-software-stack/index.md       lists every task in that session
-    session-01-software-stack/01-.../index.md  that task's README.md
+    01-software-stack-work/index.md          lists every task in that session
+    01-software-stack-work/01-.../index.md   that task's README.md
 
 READMEs are used exactly as they are stored in the repository: no front
 matter, no extra metadata files.  Everything the site needs is derived from

@@ -1,0 +1,10 @@
+/caesar
+/caesar-static
+/caesar-dyn
+/caesar-static-lib
+/caesar-both
+/caesar-both-dyn
+/vigenere
+/vigenere-static
+/vigenere-dyn
+/vigenere-static-lib

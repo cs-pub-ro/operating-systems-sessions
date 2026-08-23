@@ -1,0 +1,7 @@
+/main_static
+/main_dynamic
+/main_fullstatic
+/main_rpath
+/main_noplt
+/mystring.c
+/mystring.h

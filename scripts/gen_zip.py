@@ -2,9 +2,13 @@
 """Pack the tasks of every session into one archive per session.
 
 These are the archives handed to students, so they hold the tasks and nothing
-else: the reference solutions, and the challenge flags that live beside them,
-are left out.  What counts as a task is decided by `sessions.py`, the same rule
-the website uses, so the two can never disagree.
+else.  A session is a `NN-<name>-work/` directory (see `sessions.py`, the same
+rule the website uses, so the two can never disagree); its `NN-<name>-full-contents/`
+sibling -- the reference solutions, and for session 05 the challenge flags and
+exploits -- is never a session and so is never packed.  The archive is named
+after the session with the `-work` suffix stripped, so students unzip a clean
+`NN-<name>/` directory.  As a last line of defence, packing aborts outright if
+any file from a `-full-contents/` tree ever reaches an archive.
 
 Only files tracked by git are packed.  A build artefact left in the working
 tree -- an object file, a compiled binary, a core dump -- is therefore never
@@ -60,6 +64,17 @@ def is_internal(path):
     return any(path.match(pattern) for pattern in EXCLUDED_FILES)
 
 
+def is_reference(path):
+    """Whether a file belongs to a `-full-contents/` reference tree.
+
+    Such files -- reference solutions, and the session 05 flags and exploits --
+    must never appear in a student archive.  This is a safety net, not the main
+    filter: `find_sessions()` only ever yields `-work` directories, so a
+    reference file reaching here means a discovery bug, which we refuse to ship.
+    """
+    return any(part.endswith("-full-contents") for part in path.parts)
+
+
 def files_of_task(task, tracked, repo_root):
     """The tracked files of one task directory, in a stable order."""
     prefix = task["path"].relative_to(repo_root)
@@ -81,24 +96,42 @@ def add_file(archive, source, arcname):
     archive.writestr(info, source.read_bytes())
 
 
+def archive_name(session):
+    """The student-facing name of a session's archive, without `-work`.
+
+    Students download `NN-<name>.zip` and unzip a clean `NN-<name>/` directory;
+    the `-work` suffix is internal plumbing they never need to see.
+    """
+    slug = session["slug"]
+    return slug[: -len("-work")] if slug.endswith("-work") else slug
+
+
 def build_archive(session, tracked, output_dir, repo_root):
     """Write one session's archive, and return its path and file count.
 
     Everything is packed under a single top-level directory named after the
-    session, so that unpacking an archive creates one directory instead of
-    scattering task directories into the current one.
+    session (minus `-work`), so that unpacking an archive creates one directory
+    instead of scattering task directories into the current one.
     """
-    entries = []
+    name = archive_name(session)
+    # Keyed by archive name so a file shared by a task and a nested sub-task --
+    # e.g. the vendored `bonus-printf/printf/` tree, which is a task in its own
+    # right sitting inside the `bonus-printf` task -- is packed exactly once.
+    entries = {}
     for task in session["tasks"]:
         for path in files_of_task(task, tracked, repo_root):
-            entries.append((repo_root / path, f"{session['slug']}/{path.relative_to(session['slug'])}"))
+            # Never, under any circumstances, ship reference material.
+            if is_reference(path):
+                sys.exit(f"refusing to pack reference file into an archive: {path}")
+            arcname = f"{name}/{path.relative_to(session['slug'])}"
+            entries[arcname] = repo_root / path
 
     if not entries:
         return None, 0
 
-    target = output_dir / f"{session['slug']}.zip"
+    target = output_dir / f"{name}.zip"
     with zipfile.ZipFile(target, "w") as archive:
-        for source, arcname in sorted(entries, key=lambda entry: entry[1]):
+        for arcname, source in sorted(entries.items()):
             add_file(archive, source, arcname)
     return target, len(entries)
 
