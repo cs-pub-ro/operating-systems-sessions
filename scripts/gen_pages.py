@@ -8,7 +8,8 @@ so nothing appears on disk and the repository stays as it is.
 The site mirrors the repository layout, in three levels:
 
     index.md                                 front page, lists every session
-    01-software-stack-work/index.md          lists every task in that session
+    learner.md                               the top-level LEARNER.md guide
+    01-software-stack-work/index.md          that session's README.md
     01-software-stack-work/01-.../index.md   that task's README.md
 
 READMEs are used exactly as they are stored in the repository: no front
@@ -32,10 +33,18 @@ from sessions import (  # noqa: E402  (the path has to be set up first)
     REPO_ROOT,
     SESSION_PATTERN,
     find_sessions,
+    read_title,
 )
 
 SITE_TITLE = "Operating Systems"
 SITE_TAGLINE = "Session materials for the Operating Systems class"
+
+# The guide to the lab itself -- how a session is put together, and how to work
+# through one -- which belongs to no session.  It is published at the root of
+# the site, so that the links it makes to the session directories are the same
+# links the front page makes.
+GUIDE_SOURCE = REPO_ROOT / "LEARNER.md"
+GUIDE_PAGE = "learner.md"
 
 # The navigation tree, as the `nav_file` of the mkdocs-literate-nav plugin.
 NAV_FILE = "SUMMARY.md"
@@ -68,7 +77,7 @@ def is_page(path):
     )
 
 
-def rewrite_target(target, readme_dir):
+def rewrite_target(target, readme_dir, root_prefix=""):
     """Point one Markdown link at the page, or the file, it means.
 
     Links between READMEs are written the way the directory tree looks, such as
@@ -76,6 +85,9 @@ def rewrite_target(target, readme_dir):
     `index.md`, so the link has to name the file MkDocs knows about.  Links to
     anything else in the repository -- a `.c` file, a Makefile -- have no page,
     and are sent to GitHub instead.
+
+    `root_prefix` is the way back to the root of the site from the page being
+    written, for the one page that lives there rather than inside a session.
     """
     if EXTERNAL_PATTERN.match(target):
         return target
@@ -94,6 +106,9 @@ def rewrite_target(target, readme_dir):
     if resolved.name == "README.md" and is_page(resolved.parent):
         return f"{path_part[: -len('README.md')]}index.md{separator}{fragment}"
 
+    if resolved == GUIDE_SOURCE:
+        return f"{root_prefix}{GUIDE_PAGE}{separator}{fragment}"
+
     if resolved.is_file():
         relative = resolved.relative_to(REPO_ROOT).as_posix()
         return f"{REPO_BLOB_URL}/{relative}{separator}{fragment}"
@@ -101,13 +116,15 @@ def rewrite_target(target, readme_dir):
     return target
 
 
-def rewrite_links(text, readme_dir):
+def rewrite_links(text, readme_dir, root_prefix=""):
     """Rewrite every Markdown link of a README, outside of code blocks."""
     parts = FENCE_PATTERN.split(text)
+
+    def rewrite(match):
+        return rewrite_target(match.group(0), readme_dir, root_prefix)
+
     return "".join(
-        part
-        if part.startswith("```")
-        else LINK_PATTERN.sub(lambda m: rewrite_target(m.group(0), readme_dir), part)
+        part if part.startswith("```") else LINK_PATTERN.sub(rewrite, part)
         for part in parts
     )
 
@@ -132,15 +149,28 @@ def build_front_page(sessions):
     for session in sessions:
         count = len(session["tasks"])
         lines.append(
-            f"* [`{session['slug']}`]({session['slug']}/index.md)"
+            f"* [`{session['name']}`]({session['slug']}/index.md)"
             f" — {session['label']}, {count} task{'' if count == 1 else 's'}"
         )
     write("index.md", "\n".join(lines) + "\n")
 
 
 def build_session_page(session):
+    # The session page is the session's own README: what the session is about,
+    # the learning outcomes, how to download the archive, the setup check, and
+    # the task table -- which is the on-page list of tasks.  A session without
+    # a README falls back to a bare, generated list of its tasks.
+    readme = session["path"] / "README.md"
+    if readme.is_file():
+        text = readme.read_text(encoding="utf-8")
+        body = rewrite_links(text, readme.parent)
+        if not re.search(r"^#\s+\S", text, re.MULTILINE):
+            body = f"# {session['label']}\n\n{body}"
+        write(f"{session['slug']}/index.md", body)
+        return
+
     lines = [
-        f"# `{session['slug']}`",
+        f"# `{session['name']}`",
         "",
         session["label"],
         "",
@@ -154,18 +184,32 @@ def build_session_page(session):
 
 def build_task_page(session, task):
     text = task["readme"].read_text(encoding="utf-8")
-    body = rewrite_links(text, task["readme"].parent)
+    # The page sits one directory below the session, plus one per level of a
+    # nested task such as `demo-copy-file/malloc`.
+    depth = task["slug"].count("/") + 2
+    body = rewrite_links(text, task["readme"].parent, "../" * depth)
     # A README without a heading of its own still needs one on the page.
     if not re.search(r"^#\s+\S", text, re.MULTILINE):
         body = f"# {task['title']}\n\n{body}"
     write(f"{session['slug']}/{task['slug']}/index.md", body)
 
 
-def build_nav(sessions):
+def build_guide():
+    """Publish the guide to the lab, and return its title for the navigation."""
+    if not GUIDE_SOURCE.is_file():
+        return None
+    text = GUIDE_SOURCE.read_text(encoding="utf-8")
+    write(GUIDE_PAGE, rewrite_links(text, REPO_ROOT))
+    return read_title(GUIDE_SOURCE, "How the Lab Works")
+
+
+def build_nav(sessions, guide_title=None):
     """The navigation tree, read back by the mkdocs-literate-nav plugin."""
     lines = [f"* [{SITE_TITLE}](index.md)"]
+    if guide_title:
+        lines.append(f"* [{guide_title}]({GUIDE_PAGE})")
     for session in sessions:
-        lines.append(f"* [{session['slug']}]({session['slug']}/index.md)")
+        lines.append(f"* [{session['name']}]({session['slug']}/index.md)")
         for task in session["tasks"]:
             lines.append(
                 f"    * [{task['slug']}]({session['slug']}/{task['slug']}/index.md)"
@@ -183,11 +227,12 @@ def main():
         raise SystemExit("no session directories found")
 
     build_front_page(sessions)
+    guide_title = build_guide()
     for session in sessions:
         build_session_page(session)
         for task in session["tasks"]:
             build_task_page(session, task)
-    build_nav(sessions)
+    build_nav(sessions, guide_title)
 
 
 main()

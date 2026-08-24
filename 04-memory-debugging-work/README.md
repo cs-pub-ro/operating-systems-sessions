@@ -1,5 +1,12 @@
 # Session 04: Memory Debugging
 
+This session is about finding memory bugs, and picking the tool that matches the symptom.
+
+* Breakpoints, watchpoints and backtraces with `gdb`.
+* Invalid reads and writes, and leaks, with Valgrind.
+* Recognising common bug patterns, from integer underflow to off-by-one allocation.
+* Diagnosing a bug from a compiled binary, with no source code.
+
 ## Learning objectives
 
 By the end of this session you should be able to:
@@ -15,6 +22,23 @@ By the end of this session you should be able to:
 * Session 03 concepts: heap allocation with `malloc`/`realloc`/`free`, and ownership of a heap block.
 * A Linux environment with `gcc`, `make`, `gdb` and `valgrind` installed.
 * For the binary-only bonus exercise: `objdump`, `nm`, `readelf` and Python 3.
+
+Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+
+```console
+./scripts/check-prerequisites.sh -s 4
+```
+
+## Getting the lab archive
+
+Download [`04-memory-debugging.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/04-memory-debugging.zip), then unzip it and change into the directory it creates:
+
+```console
+unzip 04-memory-debugging.zip
+cd 04-memory-debugging
+```
+
+Work inside that directory for the rest of the session.
 
 ## Task order
 

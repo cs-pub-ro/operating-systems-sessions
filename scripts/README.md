@@ -7,6 +7,8 @@ Two things are generated from the repository tree, and both live here:
 
 Both ask `sessions.py` what a session is and what a task is, so the site and the archives can never disagree about it.
 
+A third script, `check-prerequisites.sh`, generates nothing: it checks that the [tools a session needs](#prerequisites-check) are installed.
+
 ## Website
 
 The repository is published as a static website through GitHub Pages.
@@ -16,8 +18,8 @@ The site is built with [MkDocs](https://www.mkdocs.org/) and the [Material](http
 
 The site mirrors the repository layout, in three levels:
 
-1. the front page lists every session directory, such as `01-software-stack-work`
-1. a session page lists every task in that session, such as `01-string-functions`
+1. the front page lists every session, such as `01-software-stack`
+1. a session page renders that session's `README.md`: what the session is about, the learning outcomes, how to get the archive, the setup check, and the task table that lists its tasks
 1. a task page renders that task's `README.md`
 
 ### Contents
@@ -34,11 +36,16 @@ The navigation sidebar is generated the same way, as a `SUMMARY.md` read back by
   The list is the `EXCLUDED_DIRS` set in `sessions.py`.
 * The title shown next to a task is the first level-one heading of its `README.md`.
   If the file has no heading, the directory name is used instead, and the heading is added to the page.
+* A session is shown under its index and the title of its `README.md`, not under its directory name: `01-software-stack-work/`, whose README opens with `# Session 01: The Software Stack`, is listed as `01-software-stack`.
+  The index keeps the sessions in the order they are taken in, and the `-work` suffix is plumbing students never need to see.
+  A session without a README, or with one that has no heading, falls back to its directory name.
+  The rule is `session_name()` in `sessions.py`; the URL of a page is still the directory name.
 * Links between READMEs, such as `../demo-puts-write`, are rewritten to point at the generated pages.
   Links to files that have no page of their own, such as `copy_file.c`, are sent to the file on GitHub.
 
-Adding a new session or a new task requires no change here: create the directory, write its `README.md` and push.
+Adding a new session or a new task requires no change to these scripts: create the directory, write its `README.md` and push.
 The `README.md` files need no front matter and no other metadata.
+A new task appears in the navigation sidebar automatically; to list it on the session page as well, add a row to that session's task table, which is the on-page list of tasks.
 
 The `docs/` directory only exists because MkDocs insists on one; every page is generated.
 
@@ -62,6 +69,27 @@ mkdocs serve
 The workflow deploys the site, but the repository has to allow it first.
 In the repository settings, under *Pages*, set *Source* to *GitHub Actions*.
 The site is then published at `https://<owner>.github.io/<repository>/`.
+
+## Prerequisites check
+
+`check-prerequisites.sh` checks a machine against the *Prerequisites and required tools* section of the session READMEs, and says what to install for whatever is missing.
+Students run it before a session; it is also the quickest way to tell whether a lab machine has been set up.
+
+```console
+./scripts/check-prerequisites.sh          # every session
+./scripts/check-prerequisites.sh -s 4     # only session 04
+./scripts/check-prerequisites.sh -q       # only what is missing
+```
+
+The script only looks around, it installs nothing and changes nothing.
+It exits 0 when everything the checked sessions need is there, and 1 otherwise, so it can also be used in a setup check on a lab machine.
+
+* Tools needed only by a bonus task are reported apart, and do not fail the run.
+* Three checks are not a plain lookup of a command: the machine is x86-64, where session 02 and session 05 need it; `gcc -static` links, which session 01 needs and which not every distribution installs by default; and pwntools imports in the `python3` that will run the session 05 exploits.
+* The install command is written for the package manager the machine has, out of `apt-get`, `dnf`, `pacman` and `zypper`.
+  The tool-to-package mapping is `package_for()`.
+
+When a session's prerequisites change, the list to update is the `check_session_NN` function of that session, next to the README section it mirrors.
 
 ## Lab archives
 

@@ -22,3 +22,6 @@ __pycache__/
 
 # checkpatch, fetched by the lint workflow
 .checkpatch/
+
+# Local virtual environment for the website build
+.venv/

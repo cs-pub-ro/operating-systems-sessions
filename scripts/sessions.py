@@ -49,6 +49,14 @@ ACRONYMS = {
     "cylab": "CyLab",
 }
 
+# The `Session NN:` lead-in of a session README title, which the name built
+# from that title carries as its index instead.
+SESSION_TITLE_PREFIX = re.compile(r"^session\s*\d+\s*[:.-]?\s*", re.IGNORECASE)
+
+# An article opening a title: dropped, so that "The Software Stack" becomes
+# `software-stack` rather than `the-software-stack`.
+LEADING_ARTICLE = re.compile(r"^(?:the|a|an)\s+", re.IGNORECASE)
+
 
 def prettify(name):
     """Turn a directory name such as `01-string-functions` into a label."""
@@ -60,6 +68,11 @@ def prettify(name):
     return " ".join(ACRONYMS.get(word.lower(), word.title()) for word in words if word)
 
 
+def slugify(text):
+    """Turn a title such as `Memory Operations` into `memory-operations`."""
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
 def read_title(readme_path, fallback):
     """Return the first level-one heading of a README, or a fallback."""
     for line in readme_path.read_text(encoding="utf-8").splitlines():
@@ -67,6 +80,35 @@ def read_title(readme_path, fallback):
         if match:
             return match.group(1)
     return fallback
+
+
+def session_title(session_dir):
+    """The title of a session, from its README, without the `Session NN:` lead.
+
+    `01-software-stack-work/README.md` opens with `# Session 01: The Software
+    Stack`, so the title is `The Software Stack`.  A session without a README,
+    or one whose README has no heading, falls back to its directory name.
+    """
+    fallback = prettify(session_dir.name)
+    readme = session_dir / "README.md"
+    if not readme.is_file():
+        return fallback
+    title = SESSION_TITLE_PREFIX.sub("", read_title(readme, fallback))
+    return title.strip() or fallback
+
+
+def session_name(session_dir):
+    """The name a session is shown under on the website.
+
+    The directory name is plumbing -- `01-software-stack-work` says `-work` to
+    students for no reason -- and the README title alone would lose the order
+    the sessions are taken in.  The name is therefore the index of the session
+    followed by its title, as a slug: `01-software-stack`, `03-memory-operations`.
+    """
+    title = LEADING_ARTICLE.sub("", session_title(session_dir))
+    slug = slugify(title) or slugify(session_dir.name)
+    index = re.search(r"\d+", session_dir.name)
+    return f"{index.group(0)}-{slug}" if index else slug
 
 
 def find_tasks(session_dir):
@@ -99,7 +141,8 @@ def find_sessions(repo_root=REPO_ROOT):
             {
                 "slug": entry.name,
                 "path": entry,
-                "label": prettify(entry.name),
+                "name": session_name(entry),
+                "label": session_title(entry),
                 "tasks": find_tasks(entry),
             }
         )

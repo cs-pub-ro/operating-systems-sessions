@@ -1,5 +1,12 @@
 # Session 05: Memory Security
 
+This session is about turning a memory-safety bug into an exploit: CTF-style heap challenges where you find the bug and use it to read out a secret flag.
+
+* Heap buffer overflows into an adjacent variable or struct field.
+* Overwriting a function pointer to redirect control flow.
+* Use-after-free, and how allocator (tcache) reuse turns it into a write.
+* Defeating ASLR in a PIE by combining an information leak with an overflow.
+
 ## Learning objectives
 
 By the end of this session you should be able to:
@@ -17,12 +24,29 @@ By the end of this session you should be able to:
 * `nc` for talking to a deployed challenge over the network.
 * Basic familiarity with two's complement, endianness, and reading disassembly.
 
+Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+
+```console
+./scripts/check-prerequisites.sh -s 5
+```
+
 ## How these challenges work
 
 Each task is a CTF-style challenge: you are given the source (`chall.c`) and the compiled binary (`chall`), you find the memory-safety bug, and you exploit it to make the program read out a secret `flag.txt`.
 
 Run a challenge locally with `./chall`; it opens `flag.txt` in the current directory, so drop a placeholder `flag.txt` beside it to test.
 The real flag lives only on the remote service your teaching assistant deploys — solve locally first, then point your exploit at the remote target to capture it.
+
+## Getting the lab archive
+
+Download [`05-memory-security.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/05-memory-security.zip), then unzip it and change into the directory it creates:
+
+```console
+unzip 05-memory-security.zip
+cd 05-memory-security
+```
+
+Work inside that directory for the rest of the session.
 
 ## Task order
 

@@ -1,5 +1,12 @@
 # Session 01: The Software Stack
 
+This session is about what sits between a C program and the kernel, and how such a program is built and linked.
+
+* The layers of the stack: your code, the C library, and the system calls underneath.
+* Writing core string and memory functions by hand, and measuring their cost.
+* Buffered (`printf`) versus unbuffered (`write`) output.
+* Static and dynamic linking, and building against a shared or a static library.
+
 ## Learning objectives
 
 By the end of this session you should be able to:
@@ -15,6 +22,23 @@ By the end of this session you should be able to:
 * Prior knowledge of C syntax: pointers, arrays, functions, basic `<string.h>` usage.
 * A Linux environment with `gcc`, `make`, `ar`, `ldd`, `nm`, `objdump`, `size`, `strace` and `/usr/bin/time` installed.
 * Comfort with the command line: running commands, redirecting output, reading `man` pages.
+
+Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+
+```console
+./scripts/check-prerequisites.sh -s 1
+```
+
+## Getting the lab archive
+
+Download [`01-software-stack.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/01-software-stack.zip), then unzip it and change into the directory it creates:
+
+```console
+unzip 01-software-stack.zip
+cd 01-software-stack
+```
+
+Work inside that directory for the rest of the session.
 
 ## Task order
 

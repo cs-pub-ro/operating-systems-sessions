@@ -1,5 +1,12 @@
 # Session 03: Memory Operations
 
+This session is about moving and storing data in memory -- static buffers, the heap, and memory-mapped files -- and doing it without leaking.
+
+* Copying data with a global buffer, a heap buffer, and `mmap`.
+* Freeing every allocation on every path, including the error paths.
+* Growing and shrinking a dynamic structure with `malloc` and `realloc`.
+* Proving a program leaks nothing, with Valgrind.
+
 ## Learning objectives
 
 By the end of this session you should be able to:
@@ -16,6 +23,23 @@ By the end of this session you should be able to:
 * Session 01 and 02 concepts: the software stack, and system calls.
 * Comfort with C pointers, `struct`s, and file I/O (`open`/`read`/`write` or the `<stdio.h>` equivalents).
 * A Linux environment with `gcc`, `make` and `valgrind` installed.
+
+Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+
+```console
+./scripts/check-prerequisites.sh -s 3
+```
+
+## Getting the lab archive
+
+Download [`03-memory-ops.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/03-memory-ops.zip), then unzip it and change into the directory it creates:
+
+```console
+unzip 03-memory-ops.zip
+cd 03-memory-ops
+```
+
+Work inside that directory for the rest of the session.
 
 ## Task order
 

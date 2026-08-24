@@ -1,5 +1,12 @@
 # Session 02: The Operating System Interface
 
+This session is about the system call: how a user-space program crosses into the kernel, and how the C library's convenience functions are built on top of it.
+
+* What a system call is, and the x86-64 Linux calling convention.
+* Writing raw syscall wrappers over a single generic `my_syscall()`.
+* Building libc-style helpers (`my_puts`, `my_sleep`, `my_time`) on your own wrappers.
+* Confirming which calls a program really makes, with `strace`.
+
 ## Learning objectives
 
 By the end of this session you should be able to:
@@ -19,6 +26,23 @@ By the end of this session you should be able to:
   The inline assembly in this session is specific to x86-64 Linux and will not work elsewhere.
 * No prior assembly experience is required.
   The inline assembly is given to you and explained; you never have to write any.
+
+Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+
+```console
+./scripts/check-prerequisites.sh -s 2
+```
+
+## Getting the lab archive
+
+Download [`02-os-interface.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/02-os-interface.zip), then unzip it and change into the directory it creates:
+
+```console
+unzip 02-os-interface.zip
+cd 02-os-interface
+```
+
+Work inside that directory for the rest of the session.
 
 ## Task order
 
