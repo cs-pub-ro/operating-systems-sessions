@@ -114,9 +114,10 @@ def build_archive(session, tracked, output_dir, repo_root):
     instead of scattering task directories into the current one.
     """
     name = archive_name(session)
-    # Keyed by archive name so a file shared by a task and a nested sub-task --
-    # e.g. the vendored `bonus-printf/printf/` tree, which is a task in its own
-    # right sitting inside the `bonus-printf` task -- is packed exactly once.
+    # Keyed by archive name so a file reached through more than one task is
+    # packed exactly once.  The vendored `bonus-printf/utils/printf/` tree is
+    # support code inside the `bonus-printf` task rather than a task of its own,
+    # so it is packed with `bonus-printf` even though it gets no page.
     entries = {}
     for task in session["tasks"]:
         for path in files_of_task(task, tracked, repo_root):

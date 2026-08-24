@@ -13,11 +13,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Directory names that are never part of a session, at any depth.  `solutions`
 # is the important one: it holds the reference solutions, and the flags of the
-# session 05 challenges.
+# session 05 challenges.  `utils` holds support code vendored into a task -- the
+# mpaland/printf library under `bonus-printf/utils/` -- which is packed with its
+# task but is not a task of its own, so it gets no page and no navigation entry.
 EXCLUDED_DIRS = {
     ".git",
     ".github",
     ".claude",
+    ".venv",
     "_site",
     "archives",
     "docs",
@@ -25,6 +28,7 @@ EXCLUDED_DIRS = {
     "scripts",
     "site",
     "solutions",
+    "utils",
 }
 
 # Top-level directories that are treated as sessions.

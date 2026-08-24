@@ -8,7 +8,7 @@ Connect a complete, self-contained `printf` implementation to the operating syst
 
 ## Background
 
-The [`printf/`](printf) directory holds a portable `printf` implementation, [mpaland/printf](https://github.com/mpaland/printf), designed for embedded systems that have no libc at all.
+The [`utils/printf/`](utils/printf) directory holds a portable `printf` implementation, [mpaland/printf](https://github.com/mpaland/printf), designed for embedded systems that have no libc at all.
 It knows how to format everything — integers, padding, floats — but it has no idea how to get a character out of the process.
 
 For that it delegates to one hook that you must provide:

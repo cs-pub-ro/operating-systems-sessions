@@ -53,6 +53,10 @@ NAV_FILE = "SUMMARY.md"
 # are sent instead.
 REPO_BLOB_URL = "https://github.com/cs-pub-ro/operating-systems-sessions/blob/master"
 
+# The same, for a directory that is not a page: the vendored `utils/printf`
+# tree, say, which is excluded from the site but still lives in the repository.
+REPO_TREE_URL = "https://github.com/cs-pub-ro/operating-systems-sessions/tree/master"
+
 # A Markdown link target: the `](target)` part, with an optional title.
 LINK_PATTERN = re.compile(r"(?<=\]\()([^)\s]+)(?=(?:\s+\"[^\"]*\")?\))")
 
@@ -112,6 +116,13 @@ def rewrite_target(target, readme_dir, root_prefix=""):
     if resolved.is_file():
         relative = resolved.relative_to(REPO_ROOT).as_posix()
         return f"{REPO_BLOB_URL}/{relative}{separator}{fragment}"
+
+    # A directory in the repository that is not a page -- excluded support code
+    # such as `bonus-printf/utils/printf` -- has nowhere on the site to point
+    # to, so it is sent to GitHub like a file is.
+    if resolved.is_dir():
+        relative = resolved.relative_to(REPO_ROOT).as_posix()
+        return f"{REPO_TREE_URL}/{relative}{separator}{fragment}"
 
     return target
 

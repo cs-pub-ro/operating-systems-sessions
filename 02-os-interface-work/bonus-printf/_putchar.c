@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-#include "./printf/printf.h"
+#include "./utils/printf/printf.h"
 
 /*
  * TODO: implement _putchar().
@@ -12,7 +12,7 @@
  * Your task: write `character` to standard output (file descriptor 1) using
  * the write(2) system call.
  *
- * Prototype (declared in ../printf/printf.h):
+ * Prototype (declared in ./utils/printf/printf.h):
  *   void _putchar(char character);
  *
  * Hint: write(2) signature:

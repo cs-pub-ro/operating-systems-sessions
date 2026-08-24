@@ -11,7 +11,7 @@
  * write(2) system call. That single call is the entire porting layer between
  * the library and the operating system.
  *
- * Prototype (declared in ./printf/printf.h):
+ * Prototype (declared in ./utils/printf/printf.h):
  *   void _putchar(char character);
  */
 void _putchar(char character)

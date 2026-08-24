@@ -121,9 +121,10 @@ Two consequences worth knowing before touching the tooling — the first is now 
   When you fix this, student archives must pack from `*-work/` only and exclude every `*-full-contents/`.
   This is now a safety issue: `05-memory-security-full-contents/` contains session 05's **flags and exploits**, and `gen_zip.py` only name-excludes directories literally called `solutions`, which no longer exist anywhere in the tree.
   A naive `SESSION_PATTERN` widening would ship the flags to students — see `05-memory-security-full-contents/INSTRUCTOR.md`.
-* The `VENDORED` path in `.github/workflows/lint.yml` still points at `session-02-os-interface/printf`; the vendored printf now lives at `02-os-interface-work/bonus-printf/printf`.
+* The vendored printf lives at `02-os-interface-work/bonus-printf/utils/printf`, and the `VENDORED` path in `.github/workflows/lint.yml` points there so checkpatch skips it.
+  It sits under a `utils/` directory, which is in `EXCLUDED_DIRS` (`scripts/sessions.py`), so it is packed into the `bonus-printf` archive as support code but gets no website page and no navigation entry of its own.
 
 ## Third-party content
 
-`02-os-interface-work/bonus-printf/printf/` is imported as-is and is not ours to reformat; it is excluded from markdownlint and (once the path is fixed) from checkpatch.
+`02-os-interface-work/bonus-printf/utils/printf/` is imported as-is and is not ours to reformat; it is excluded from markdownlint and from checkpatch.
 The rule, from `questions.md`: small files students are expected to read and modify get reformatted to our style; large files they only use, and anything tracking an upstream that is periodically re-synced, stay as they are.

@@ -111,7 +111,7 @@ An archive is named after the session with the `-work` suffix stripped, and unpa
 ```
 
 * A task is the same thing the website calls a task, decided by `sessions.py`: any directory below a session's `-work/` tree that has a `README.md`.
-  A file shared by a task and a nested sub-task (such as the vendored `bonus-printf/printf/` tree) is packed exactly once.
+  Support code vendored inside a task, such as the `bonus-printf/utils/printf/` tree, is packed with its task but is not itself a task, so it gets no page and no navigation entry (`utils` is in `EXCLUDED_DIRS`).
 * Only files tracked by git are packed, so an object file or a compiled binary left in the working tree is never shipped by accident.
   The archives are the same whether they are built from a clean checkout or from the tree you have been working in.
 * Files named `prompt.txt`, the notes the exercises were written from, are left out; several of them describe the solution.

@@ -6,7 +6,7 @@
 {
   "ignores": [
     // Third-party README, imported as it is.
-    "02-os-interface-work/bonus-printf/printf/README.md",
+    "02-os-interface-work/bonus-printf/utils/printf/README.md",
     "_site/**",
     "node_modules/**",
     ".venv/**",

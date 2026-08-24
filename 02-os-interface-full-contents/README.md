@@ -54,5 +54,5 @@ That last inversion is the payoff, and it is the same shape of argument as sessi
 ## A note on the vendored library
 
 `bonus-printf` uses [mpaland/printf](https://github.com/mpaland/printf), MIT licensed.
-A single copy lives in [`../02-os-interface-work/bonus-printf/printf/`](../02-os-interface-work/bonus-printf/printf) and this directory's `Makefile` points at it, rather than duplicating 600 kB of third-party code.
+A single copy lives in [`../02-os-interface-work/bonus-printf/utils/printf/`](../02-os-interface-work/bonus-printf/utils/printf) and this directory's `Makefile` points at it, rather than duplicating 600 kB of third-party code.
 The upstream `test/` directory has been removed, as nothing here builds it.

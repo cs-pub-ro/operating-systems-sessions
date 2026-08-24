@@ -63,5 +63,5 @@ The demo produces the `my_syscall()` function that every later task reuses uncha
 Each exercise directory has a `README.md` with the task itself.
 Where there is also a `FURTHER.md`, it holds optional extensions and questions to dig into once the task is done.
 
-The [`bonus-printf/printf/`](bonus-printf/printf) directory contains a third-party portable `printf` implementation ([mpaland/printf](https://github.com/mpaland/printf), MIT licensed).
+The [`bonus-printf/utils/printf/`](bonus-printf/utils/printf) directory contains a third-party portable `printf` implementation ([mpaland/printf](https://github.com/mpaland/printf), MIT licensed).
 It is support code for that exercise, not an exercise in itself.
