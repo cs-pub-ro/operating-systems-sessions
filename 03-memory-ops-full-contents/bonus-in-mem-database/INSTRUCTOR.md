@@ -3,7 +3,7 @@
 ## Purpose
 
 The mirror image of the core exercise, and harder than it looks.
-Students must copy their own working `main.c` across first, so a broken `01-in-memory-db` blocks this entirely.
+Students must copy their own working `main.c` across first, so a broken `03-in-memory-db` blocks this entirely.
 
 ## Expected behaviour
 

@@ -4,7 +4,7 @@
 
 ## Goal
 
-Reference implementation of the shrinking database bonus: the array from `01-in-memory-db` extended so it can also **remove records** and **give memory back**.
+Reference implementation of the shrinking database bonus: the array from `03-in-memory-db` extended so it can also **remove records** and **give memory back**.
 
 ## Background
 

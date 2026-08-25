@@ -4,8 +4,7 @@ This session is about turning a memory-safety bug into an exploit: CTF-style hea
 
 * Heap buffer overflows into an adjacent variable or struct field.
 * Overwriting a function pointer to redirect control flow.
-* Use-after-free, and how allocator (tcache) reuse turns it into a write.
-* Defeating ASLR in a PIE by combining an information leak with an overflow.
+* Use-after-free, and how allocator reuse turns it into a write.
 
 ## Learning objectives
 
@@ -14,8 +13,7 @@ By the end of this session you should be able to:
 * Explain how a heap buffer overflow can corrupt an adjacent variable or structure field.
 * Craft an overflow payload that sets a target value precisely, including endianness considerations.
 * Overwrite a function pointer stored on the heap and redirect control flow to code of your choosing.
-* Explain what a use-after-free bug is, and how allocator reuse (glibc's tcache) turns it into a write primitive.
-* Combine an information leak with a heap overflow to defeat ASLR in a position-independent executable.
+* Explain what a use-after-free bug is, and how allocator reuse turns it into a write primitive.
 
 ## Prerequisites and required tools
 
@@ -24,11 +22,18 @@ By the end of this session you should be able to:
 * `nc` for talking to a deployed challenge over the network.
 * Basic familiarity with two's complement, endianness, and reading disassembly.
 
-Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+Check that your system has all it needs for the lab, by downloading and running the [`check-prerequisites.sh` script](https://github.com/cs-pub-ro/operating-systems-sessions/blob/master/scripts/check-prerequisites.sh):
 
 ```console
-./scripts/check-prerequisites.sh
+wget http://raw.githubusercontent.com/cs-pub-ro/operating-systems-sessions/refs/heads/master/scripts/check-prerequisites.sh
+chmod a+x check-prerequisites.sh
+./check-prerequisites.sh
 ```
+
+The script installs nothing.
+It reports what is missing and prints the command that installs it on your distribution.
+
+If something is missing, be sure to install and configure it.
 
 ## How these challenges work
 
@@ -42,8 +47,9 @@ The real flag lives only on the remote service your teaching assistant deploys â
 Download [`05-memory-security.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/05-memory-security.zip), then unzip it and change into the directory it creates:
 
 ```console
+wget https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/05-memory-security.zip
 unzip 05-memory-security.zip
-cd 05-memory-security
+cd 05-memory-security/
 ```
 
 Work inside that directory for the rest of the session.

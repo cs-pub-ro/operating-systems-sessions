@@ -6,7 +6,7 @@ One program, three ways of obtaining the memory it copies through.
 Work them in order — the point is the comparison, not any single variant.
 
 If time is short, do **global-buffer** and **mmap** and describe `malloc` verbally.
-The malloc variant's lesson (cleanup on every path) is re-taught by `01-in-memory-db` anyway; the mmap variant's is not taught anywhere else in the course.
+The malloc variant's lesson (cleanup on every path) is re-taught by `03-in-memory-db` anyway; the mmap variant's is not taught anywhere else in the course.
 
 ## What each variant is for
 

@@ -27,7 +27,10 @@ By the end of this session you should be able to:
 | Task | Type | Objective |
 | --- | --- | --- |
 | [`demo-copy-file`](demo-copy-file) | Demo | One file-copy program, three ways of obtaining the memory: global, heap, mapped. |
-| [`01-in-memory-db`](01-in-memory-db) | Core | A growable heap array, and the `realloc` idiom. |
+| [`01-xor-encrypt`](01-xor-encrypt) | Core | A fixed-size problem: static buffers only, and why no `malloc` is needed. |
+| [`02-products`](02-products) | Core | A static array of structs, with each name `malloc`'d to a length known only at run time. |
+| [`03-in-memory-db`](03-in-memory-db) | Core | A growable heap array, and the `realloc` idiom. |
+| [`bonus-products`](bonus-products) | Bonus | `02-products` as an unbounded linked list, sorted on insert. |
 | [`bonus-in-mem-database`](bonus-in-mem-database) | Bonus | Deletion, shrinking, and the hysteresis rule. |
 
 The demo's three variants share one `FURTHER.md` and one `INSTRUCTOR.md`, at [`demo-copy-file/`](demo-copy-file), since the point of the demo is the comparison between them.
@@ -46,7 +49,11 @@ The session is about **who owns a piece of memory and when it is released**.
    Global: the compiler decides the size and nobody cleans up.
    Heap: you decide the size at run time and you clean up, on every path.
    Mapped: the kernel provides the memory, the read/write loop disappears, and the I/O happens as page faults.
-1. **`01-in-memory-db`** makes ownership dynamic.
+1. **`01-xor-encrypt`** is the baseline case where the question does not arise.
+   Every size is fixed at compile time, so the key and buffers are static, nothing is owned, and nothing can leak — which is exactly what makes the contrast with the next exercise sharp.
+1. **`02-products`** introduces the first real owner.
+   The array of products is still static, but each name's length is decided by the input, so each name is `malloc`'d to fit and must be freed — one allocation, one owner, one free, on every path.
+1. **`03-in-memory-db`** makes ownership dynamic.
    The `realloc` idiom exists because a failed reallocation leaves the old block alive — and the obvious one-line version of the call throws it away.
 1. **`bonus-in-mem-database`** makes it symmetric, and introduces hysteresis: grow at one threshold, shrink at another, or thrash.
 

@@ -5,7 +5,7 @@ Two things are generated from the repository tree, and both live here:
 * `gen_pages.py` builds the [website](#website)
 * `gen_zip.py` builds the [lab archives](#lab-archives) handed to students
 
-Both ask `sessions.py` what a session is and what a task is, so the site and the archives can never disagree about it.
+Both ask `sessions.py` what a session is and what an exercise is, so the site and the archives can never disagree about it.
 
 A third script, `check-prerequisites.sh`, generates nothing: it checks that the [tools a session needs](#prerequisites-check) are installed.
 
@@ -19,8 +19,8 @@ The site is built with [MkDocs](https://www.mkdocs.org/) and the [Material](http
 The site mirrors the repository layout, in three levels:
 
 1. the front page lists every session, such as `01-software-stack`
-1. a session page renders that session's `README.md`: what the session is about, the learning outcomes, how to get the archive, the setup check, and the task table that lists its tasks
-1. a task page renders that task's `README.md`
+1. a session page renders that session's `README.md`: what the session is about, the learning outcomes, how to get the archive, the setup check, and the exercise table that lists its exercises
+1. an exercise page renders that exercise's `README.md`
 
 ### Contents
 
@@ -30,11 +30,11 @@ The navigation sidebar is generated the same way, as a `SUMMARY.md` read back by
 
 * A session is a top-level `NN-<name>-work/` directory: the student-facing side of the lab.
   Its `NN-<name>-full-contents/` sibling holds the reference material — solutions, and for session 05 the challenge flags and exploits — and is deliberately not a session, so it is never published on the site and never packed into an archive. This is the successor to the old `solutions/` convention. The rule is `SESSION_PATTERN` in `sessions.py` (the legacy `session-NN-*` form is still recognised).
-* A task is any directory below a session that contains a `README.md` file.
-  Nested tasks, such as `demo-copy-file/malloc`, are listed with their path relative to the session.
+* An exercise is any directory below a session that contains a `README.md` file.
+  Nested exercises, such as `demo-copy-file/malloc`, are listed with their path relative to the session.
 * Directories named `solutions` are skipped, together with `.git`, `.github`, `docs`, `scripts` and `site`.
   The list is the `EXCLUDED_DIRS` set in `sessions.py`.
-* The title shown next to a task is the first level-one heading of its `README.md`.
+* The title shown next to an exercise is the first level-one heading of its `README.md`.
   If the file has no heading, the directory name is used instead, and the heading is added to the page.
 * A session is shown under its index and the title of its `README.md`, not under its directory name: `01-software-stack-work/`, whose README opens with `# Session 01: The Software Stack`, is listed as `01-software-stack`.
   The index keeps the sessions in the order they are taken in, and the `-work` suffix is plumbing students never need to see.
@@ -43,9 +43,9 @@ The navigation sidebar is generated the same way, as a `SUMMARY.md` read back by
 * Links between READMEs, such as `../demo-puts-write`, are rewritten to point at the generated pages.
   Links to files that have no page of their own, such as `copy_file.c`, are sent to the file on GitHub.
 
-Adding a new session or a new task requires no change to these scripts: create the directory, write its `README.md` and push.
+Adding a new session or a new exercise requires no change to these scripts: create the directory, write its `README.md` and push.
 The `README.md` files need no front matter and no other metadata.
-A new task appears in the navigation sidebar automatically; to list it on the session page as well, add a row to that session's task table, which is the on-page list of tasks.
+A new exercise appears in the navigation sidebar automatically; to list it on the session page as well, add a row to that session's exercise table, which is the on-page list of exercises.
 
 The `docs/` directory only exists because MkDocs insists on one; every page is generated.
 
@@ -83,7 +83,7 @@ Students run it before a session; it is also the quickest way to tell whether a 
 The script only looks around, it installs nothing and changes nothing.
 It exits 0 when everything the checked sessions need is there, and 1 otherwise, so it can also be used in a setup check on a lab machine.
 
-* Tools needed only by a bonus task are reported apart, and do not fail the run.
+* Tools needed only by a bonus exercise are reported apart, and do not fail the run.
 * Three checks are not a plain lookup of a command: the machine is x86-64, where session 02 and session 05 need it; `gcc -static` links, which session 01 needs and which not every distribution installs by default; and pwntools imports in the `python3` that will run the session 05 exploits.
 * The install command is written for the package manager the machine has, out of `apt-get`, `dnf`, `pacman` and `zypper`.
   The tool-to-package mapping is `package_for()`.
@@ -92,8 +92,8 @@ When a session's prerequisites change, the list to update is the `check_session_
 
 ## Lab archives
 
-Every session's `-work/` directory is packed into one zip archive of its tasks, published on the `lab-archives` branch, which holds nothing else.
-The archives are what students download, so they contain the tasks and nothing more: the `NN-<name>-full-contents/` reference material — solutions, and the session 05 flags and exploits — is never packed.
+Every session's `-work/` directory is packed into one zip archive of its exercises, published on the `lab-archives` branch, which holds nothing else.
+The archives are what students download, so they contain the exercises and nothing more: the `NN-<name>-full-contents/` reference material — solutions, and the session 05 flags and exploits — is never packed.
 
 The `.github/workflows/lab-archive.yml` workflow rebuilds and republishes them on every push to `master` that touches a session, and can also be run by hand from the *Actions* tab.
 
@@ -109,15 +109,15 @@ An archive is named after the session with the `-work` suffix stripped, and unpa
     └── demo-copy-file/{global-buffer,malloc,mmap}/
 ```
 
-* A task is the same thing the website calls a task, decided by `sessions.py`: any directory below a session's `-work/` tree that has a `README.md`.
-  Support code vendored inside a task, such as the `bonus-printf/utils/printf/` tree, is packed with its task but is not itself a task, so it gets no page and no navigation entry (`utils` is in `EXCLUDED_DIRS`).
+* An exercise is the same thing the website calls an exercise, decided by `sessions.py`: any directory below a session's `-work/` tree that has a `README.md`.
+  Support code vendored inside an exercise, such as the `bonus-printf/utils/printf/` tree, is packed with its exercise but is not itself an exercise, so it gets no page and no navigation entry (`utils` is in `EXCLUDED_DIRS`).
 * Only files tracked by git are packed, so an object file or a compiled binary left in the working tree is never shipped by accident.
   The archives are the same whether they are built from a clean checkout or from the tree you have been working in.
 * Files named `prompt.txt`, the notes the exercises were written from, are left out; several of them describe the solution.
   The list is the `EXCLUDED_FILES` tuple in `gen_zip.py`.
 * As a last line of defence, packing aborts outright if any file from a `-full-contents/` tree ever reaches an archive; `gen_zip.py`'s `is_reference()` is the guard.
 * Archives are byte-for-byte reproducible: entries are sorted and timestamps are fixed.
-  Editing one task therefore changes that one archive, and the workflow commits nothing at all when no content has changed.
+  Editing one exercise therefore changes that one archive, and the workflow commits nothing at all when no content has changed.
 
 ### Building locally
 

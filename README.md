@@ -48,7 +48,7 @@ Every session README lists the tools that session needs.
 [`scripts/check-prerequisites.sh`](scripts/check-prerequisites.sh) checks a machine against those lists and prints the command that installs whatever is missing:
 
 ```console
-./scripts/check-prerequisites.sh          # every session
+./scripts/check-prerequisites.sh
 ```
 
 It installs nothing and changes nothing, and exits non-zero when something needed is missing.

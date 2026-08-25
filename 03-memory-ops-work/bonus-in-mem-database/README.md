@@ -8,7 +8,7 @@ Extend the database so it can remove records and **give memory back**, keeping t
 
 ## Background
 
-This builds directly on [`01-in-memory-db`](../01-in-memory-db).
+This builds directly on [`03-in-memory-db`](../03-in-memory-db).
 Start from **your finished `main.c`** of that task and copy it here.
 It assumes you already have working `db_init`, `db_add`, `db_print` and `db_free`, and that the array grows in chunks of `CHUNK` records — call it `N` from here on.
 

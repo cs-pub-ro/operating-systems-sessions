@@ -15,27 +15,35 @@ By the end of this session you should be able to:
 * Implement basic string-handling functions (`strlen`, `strcpy`, `strcat`, `memcpy`) and reason about their algorithmic cost.
 * Compare buffered (`printf`) and unbuffered (`write`) output, and explain the buffering trade-off from measured data.
 * Build a C program as a dynamically-linked executable, a statically-linked executable, and against a shared or a static library.
-* Explain the difference between static linking (`.a`, `ar`) and dynamic linking (`.so`), including symbol resolution via the PLT and the GOT.
+* Explain the difference between static linking (`.a`, `ar`) and dynamic linking (`.so`).
 
 ## Prerequisites and required tools
 
-* Prior knowledge of C syntax: pointers, arrays, functions, basic `<string.h>` usage.
+* Prior knowledge of C syntax.
 * A Linux environment with `gcc`, `make`, `ar`, `ldd`, `nm`, `objdump`, `size`, `strace` and `/usr/bin/time` installed.
 * Comfort with the command line: running commands, redirecting output, reading `man` pages.
 
-Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+Check that your system has all it needs for the lab, by downloading and running the [`check-prerequisites.sh` script](https://github.com/cs-pub-ro/operating-systems-sessions/blob/master/scripts/check-prerequisites.sh):
 
 ```console
-./scripts/check-prerequisites.sh
+wget http://raw.githubusercontent.com/cs-pub-ro/operating-systems-sessions/refs/heads/master/scripts/check-prerequisites.sh
+chmod a+x check-prerequisites.sh
+./check-prerequisites.sh
 ```
+
+The script installs nothing.
+It reports what is missing and prints the command that installs it on your distribution.
+
+If something is missing, be sure to install and configure it.
 
 ## Getting the lab archive
 
 Download [`01-software-stack.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/01-software-stack.zip), then unzip it and change into the directory it creates:
 
 ```console
+wget https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/01-software-stack.zip
 unzip 01-software-stack.zip
-cd 01-software-stack
+cd 01-software-stack/
 ```
 
 Work inside that directory for the rest of the session.

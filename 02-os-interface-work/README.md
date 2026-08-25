@@ -1,6 +1,6 @@
 # Session 02: The Operating System Interface
 
-This session is about the system call: how a user-space program crosses into the kernel, and how the C library's convenience functions are built on top of it.
+This session is about system calls: how a user-space program crosses into the kernel, and how the C library's convenience functions are built on top of it.
 
 * What a system call is, and the x86-64 Linux calling convention.
 * Writing raw syscall wrappers over a single generic `my_syscall()`.
@@ -27,19 +27,27 @@ By the end of this session you should be able to:
 * No prior assembly experience is required.
   The inline assembly is given to you and explained; you never have to write any.
 
-Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
+Check that your system has all it needs for the lab, by downloading and running the [`check-prerequisites.sh` script](https://github.com/cs-pub-ro/operating-systems-sessions/blob/master/scripts/check-prerequisites.sh):
 
 ```console
-./scripts/check-prerequisites.sh
+wget http://raw.githubusercontent.com/cs-pub-ro/operating-systems-sessions/refs/heads/master/scripts/check-prerequisites.sh
+chmod a+x check-prerequisites.sh
+./check-prerequisites.sh
 ```
+
+The script installs nothing.
+It reports what is missing and prints the command that installs it on your distribution.
+
+If something is missing, be sure to install and configure it.
 
 ## Getting the lab archive
 
 Download [`02-os-interface.zip`](https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/02-os-interface.zip), then unzip it and change into the directory it creates:
 
 ```console
+wget https://github.com/cs-pub-ro/operating-systems-sessions/raw/lab-archives/02-os-interface.zip
 unzip 02-os-interface.zip
-cd 02-os-interface
+cd 02-os-interface/
 ```
 
 Work inside that directory for the rest of the session.

@@ -20,7 +20,9 @@ This affects every task in the session and has nothing to do with the student's 
 The session is about **who owns a piece of memory and when it is released**.
 
 1. **`demo-copy-file`** asks the same question three ways: global (compiler decides, nobody cleans up), heap (you decide, you clean up on every path), mapped (the kernel provides it, and the copy loop disappears).
-1. **`01-in-memory-db`** makes ownership dynamic, and introduces the `realloc` idiom.
+1. **`01-xor-encrypt`** is the case where the question does not arise: fixed sizes, static buffers, nothing owned, nothing to leak — the baseline the dynamic exercises are measured against.
+1. **`02-products`** brings in the first owner: a static array of structs, but each name `malloc`'d to a length known only at run time, and freed on every path.
+1. **`03-in-memory-db`** makes ownership dynamic, and introduces the `realloc` idiom.
 1. **`bonus-in-mem-database`** makes it symmetric, and introduces hysteresis.
 
 The practical point running through all of it: **the happy path proves nothing**.
@@ -31,7 +33,7 @@ That is the argument for Valgrind being a required tool, and it is worth making 
 
 * **`db->records = realloc(db->records, ...)`** — the line most students write.
   On failure `realloc` returns `NULL` *and leaves the original block allocated*, so this leaks the block and loses all the data.
-  `01-in-memory-db` is designed to provoke it.
+  `03-in-memory-db` is designed to provoke it.
 * **`count <= capacity - CHUNK` on a `size_t`** — when `capacity` is 0 this wraps to a huge value and the code attempts an 18-exabyte `realloc`.
   `bonus-in-mem-database` is designed to provoke it.
 
@@ -40,9 +42,9 @@ Both read as obviously correct. Let students hit them.
 ## Timing and pacing
 
 The demo has three variants and they take a while.
-If time is short, do **global-buffer** and **mmap**, and describe the malloc variant verbally: its lesson (cleanup on every path) is re-taught by `01-in-memory-db`, whereas the mmap material appears nowhere else in the course.
+If time is short, do **global-buffer** and **mmap**, and describe the malloc variant verbally: its lesson (cleanup on every path) is re-taught by `03-in-memory-db`, whereas the mmap material appears nowhere else in the course.
 
-`bonus-in-mem-database` requires the student's own finished `01-in-memory-db`, so it is genuinely a take-home task for most of the room.
+`bonus-in-mem-database` requires the student's own finished `03-in-memory-db`, so it is genuinely a take-home task for most of the room.
 
 ## Demonstrations worth the time
 
@@ -58,7 +60,7 @@ If time is short, do **global-buffer** and **mmap**, and describe the malloc var
 
 | Fact | Value |
 | --- | --- |
-| `01-in-memory-db` with the shipped `input.txt` (10 records) | count 10, capacity 12 (`0 -> 4 -> 8 -> 12`) |
+| `03-in-memory-db` with the shipped `input.txt` (10 records) | count 10, capacity 12 (`0 -> 4 -> 8 -> 12`) |
 | `bonus-in-mem-database` with the shipped `input.txt` | count 3, capacity 4; records `alice`, `carol`, `grace` |
 | Both under Valgrind | 0 errors, all heap blocks freed |
 | `mmap` failure value | `MAP_FAILED`, i.e. `(void *) -1` — **not** `NULL` |

@@ -1,5 +1,5 @@
 /*
- * Reference solution for 01-in-memory-db.
+ * Reference solution for 03-in-memory-db.
  *
  * Build:  make
  * Run:    ./db < input.txt

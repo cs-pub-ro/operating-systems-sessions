@@ -159,7 +159,7 @@ def build_front_page(sessions):
     lines = [f"# {SITE_TITLE}", "", SITE_TAGLINE, "", intro, "", "## Sessions", ""]
     for session in sessions:
         lines.append(
-            f"* [`{session['name']}`]({session['slug']}/index.md) — {session['label']}"
+            f"* [{session['label']}]({session['slug']}/index.md)"
         )
     write("index.md", "\n".join(lines) + "\n")
 
