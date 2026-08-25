@@ -115,6 +115,19 @@ def session_name(session_dir):
     return f"{index.group(0)}-{slug}" if index else slug
 
 
+def session_heading(session_dir):
+    """The heading a session is shown under, `01: The Software Stack`.
+
+    The title of the session README, which is what a reader sees at the top of
+    the session page, led by the index of the session so that the order the
+    sessions are taken in survives.  The `Session` of `Session 01:` is dropped:
+    every entry of the navigation is a session, so the word says nothing.
+    """
+    title = session_title(session_dir)
+    index = re.search(r"\d+", session_dir.name)
+    return f"{index.group(0)}: {title}" if index else title
+
+
 def find_tasks(session_dir):
     """Every directory below a session that holds a README, depth-first."""
     tasks = []
@@ -147,6 +160,7 @@ def find_sessions(repo_root=REPO_ROOT):
                 "path": entry,
                 "name": session_name(entry),
                 "label": session_title(entry),
+                "heading": session_heading(entry),
                 "tasks": find_tasks(entry),
             }
         )

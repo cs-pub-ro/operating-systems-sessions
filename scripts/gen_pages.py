@@ -215,12 +215,16 @@ def build_guide():
 
 
 def build_nav(sessions, guide_title=None):
-    """The navigation tree, read back by the mkdocs-literate-nav plugin."""
+    """The navigation tree, read back by the mkdocs-literate-nav plugin.
+
+    A session is listed under the title of its README, led by its index --
+    `01: The Software Stack` -- and not under the directory it lives in.
+    """
     lines = [f"* [{SITE_TITLE}](index.md)"]
     if guide_title:
         lines.append(f"* [{guide_title}]({GUIDE_PAGE})")
     for session in sessions:
-        lines.append(f"* [{session['name']}]({session['slug']}/index.md)")
+        lines.append(f"* [{session['heading']}]({session['slug']}/index.md)")
         for task in session["tasks"]:
             lines.append(
                 f"    * [{task['slug']}]({session['slug']}/{task['slug']}/index.md)"
