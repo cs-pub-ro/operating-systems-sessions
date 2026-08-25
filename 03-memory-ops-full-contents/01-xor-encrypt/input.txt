@@ -1,0 +1,6 @@
+The quick brown fox jumps over the lazy dog.
+Pack my box with five dozen liquor jugs.
+Sphinx of black quartz, judge my vow.
+How vexingly quick daft zebras jump!
+Memory is not released when a variable goes out of scope.
+A fixed-size buffer needs no malloc and no free.

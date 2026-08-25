@@ -1,0 +1,21 @@
+Create an exercise for an Operating Systems class session.
+The session topic is the memory operations: allocating, freeing, accessing memory.
+
+The exercise implements a simple XOR encryption of a file and outputs it in another file.
+The encryption key is a 32 bytes static array.
+The program uses two buffers of also 32 bytes to read from the input file, encrypt to the output buffer and the write to the output file.
+
+The aim is to show that when size is predetermined, there is no need for dynamic allocation, only for static memory allocation (for key and buffers).
+
+Create a directory called 01-xor-encrypt/ with 4 files:
+- `xor_encrypt.c`: implements the XOR encryption
+- `Makefile`: the recipe file to build the files
+- `input.txt`: a random strings file to be used as input
+- `README.md`: presents the aim of the exercise and instructions on how to build, run and test the implementation
+
+The structure and contents are replicated in the `../03-memory-ops-work/01-xor-encrypt/` directory.
+Differences are:
+- the `01-xor-encrypt/` directory contains missing items with comments where the students must add their implementation (marked clearly as TODO comments)
+- the `README.md` presents instructions on solving the exercise
+
+Follow the structure of other exercises.

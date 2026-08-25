@@ -1,0 +1,24 @@
+Create an exercise for an Operating Systems class session.
+The session topic is the memory operations: allocating, freeing, accessing memory.
+
+The exercise implements the sorting of a list of products based on price.
+Products are stored in a file (`products.txt`), each product occupying two lines: one with the program name, another one with an integer price.
+The implementation declares a structure with two elements: an unsigned integer for the price and a char * for the product name.
+The implementation defines an array of 32 elements of the structure type (a static array).
+The input from the file is read into static buffers.
+Then, for the name, we use malloc() dynamic allocation to allocate the exact size of the product name, based on the size of then string.
+
+The aim is to show that when size is unknown, we use dynamic memory allocation.
+
+Create a directory called 02-products/ with 4 files:
+- `products.c`: implements the program to read and sort products
+- `Makefile`: the recipe file to build the files
+- `products.txt`: the list of 32 products, 64 lines
+- `README.md`: presents the aim of the exercise and instructions on how to build, run and test the implementation
+
+The structure and contents are replicated in the `../03-memory-ops-work/02-products/` directory.
+Differences are:
+- the `02-products/` directory contains missing items with comments where the students must add their implementation (marked clearly as TODO comments)
+- the `README.md` presents instructions on solving the exercise
+
+Follow the structure of other exercises.
