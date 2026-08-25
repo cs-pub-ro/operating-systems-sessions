@@ -21,7 +21,6 @@ Check that a machine has what a session needs before the session, not during it:
 
 ```console
 ./scripts/check-prerequisites.sh          # every session
-./scripts/check-prerequisites.sh -s 4     # only session 04
 ```
 
 The script installs nothing.
@@ -29,7 +28,7 @@ It reports what is missing and prints the command that installs it on your distr
 
 ## How a session is structured
 
-Every session is one directory, and the tasks inside it come in three kinds.
+Every session is one directory, and the exercises inside it come in three kinds.
 The kind is the prefix of the task's directory name:
 
 * `demo-*` — the warm-up, worked through together with the teaching assistant at the start of the session.
@@ -43,12 +42,12 @@ You do **one single demo** together with the teaching assistant, then move on to
 
 A session directory often holds more than one demo, but only one of them is done in the session: the teaching assistant picks the one that fits the group.
 The rest are there for you to read afterwards.
-The bonus tasks are not expected of everyone — nobody is behind for not reaching them — and they are worth taking home when you do not get to them in the session.
+The bonus exercises are not expected of everyone — nobody is behind for not reaching them — and they are worth taking home when you do not get to them in the session.
 
 Each task directory is self-contained: sources, a `Makefile`, and the files that go with them.
 You can copy one somewhere else and it will still build.
 
-The session's own `README.md` is the map: what you should be able to do by the end, what you need installed, and the order the tasks are taken in.
+The session's own `README.md` is the map: what you should be able to do by the end, what you need installed, and the order the exercises are taken in.
 Read it first.
 
 Inside a task directory:
@@ -127,11 +126,3 @@ Before you raise your hand, if you have a minute for it, try:
 Then ask the teaching assistant, and bring what you have: the command you ran, the output you got, the output you expected, and what you have already tried.
 This is not just politeness, it is half of debugging — a surprising number of bugs are solved out loud while describing them.
 And if the minute is not there, or the bug has already eaten it, ask anyway.
-
-## Reference material
-
-Each session directory has a `-full-contents` sibling, with the reference solution and a full explanation of every task.
-It is there so you can compare it with what you wrote, and so you can go back to a session you missed.
-
-Read it after you have made a real attempt at a task, not instead of one.
-A solution you have read makes sense while you read it; a solution you have written is one you can write again.

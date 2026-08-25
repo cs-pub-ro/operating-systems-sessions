@@ -26,7 +26,7 @@ By the end of this session you should be able to:
 Before the session, check that your machine has these tools with the [setup script](../scripts/check-prerequisites.sh):
 
 ```console
-./scripts/check-prerequisites.sh -s 4
+./scripts/check-prerequisites.sh
 ```
 
 ## Getting the lab archive

@@ -7,7 +7,6 @@
 # Run it before a session, on the machine you will be working on:
 #
 #     ./scripts/check-prerequisites.sh          # every session
-#     ./scripts/check-prerequisites.sh -s 4     # only session 04
 #
 # It changes nothing: it only looks around and reports. The exit status is 0
 # when everything a checked session needs is there, and 1 otherwise.
@@ -39,7 +38,6 @@ Usage: check-prerequisites.sh [OPTION]...
 
 Check that the tools needed by the lab sessions are installed.
 
-  -s, --session N   check only session N (1 to 5), instead of all of them
   -q, --quiet       report only what is missing
   -h, --help        show this message
 
@@ -52,19 +50,6 @@ session=all
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
-	-s | --session)
-		if [[ $# -lt 2 ]]; then
-			echo "error: $1 needs a session number" >&2
-			exit 2
-		fi
-		if [[ ! $2 =~ ^[0-9]+$ ]] ||
-			((10#$2 < 1 || 10#$2 > LAST_SESSION)); then
-			echo "error: no such session: $2 (expected 1 to $LAST_SESSION)" >&2
-			exit 2
-		fi
-		session=$((10#$2))
-		shift 2
-		;;
 	-q | --quiet)
 		quiet=1
 		shift

@@ -77,7 +77,6 @@ Students run it before a session; it is also the quickest way to tell whether a 
 
 ```console
 ./scripts/check-prerequisites.sh          # every session
-./scripts/check-prerequisites.sh -s 4     # only session 04
 ./scripts/check-prerequisites.sh -q       # only what is missing
 ```
 

@@ -49,7 +49,6 @@ Every session README lists the tools that session needs.
 
 ```console
 ./scripts/check-prerequisites.sh          # every session
-./scripts/check-prerequisites.sh -s 4     # only session 04
 ```
 
 It installs nothing and changes nothing, and exits non-zero when something needed is missing.
@@ -57,7 +56,7 @@ See the *Prerequisites check* section of [`scripts/README.md`](scripts/README.md
 
 ## Lab archives
 
-Each session is packed into a zip archive of its tasks, without the reference solutions, and published on the `lab-archives` branch.
+Each session is packed into a zip archive of its exercises, without the reference solutions, and published on the `lab-archives` branch.
 The `.github/workflows/lab-archive.yml` workflow rebuilds them on every push to `master` that touches a session.
 Build them locally with `python3 scripts/gen_zip.py`; see [`scripts/README.md`](scripts/README.md) for what goes in and how to create the branch the first time.
 
