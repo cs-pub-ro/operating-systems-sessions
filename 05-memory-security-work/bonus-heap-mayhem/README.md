@@ -9,6 +9,7 @@ Every account gets audited on request — nothing to worry about, right?
 
 Defeat ASLR by leaking a code pointer, then use a heap overflow to redirect an audit callback to a function that prints the flag.
 
+The service is deployed at `141.85.224.106:31021`.
 ## Background
 
 Each account is a heap struct with a name, a balance, and an `audit` function pointer that is called when the account is audited.
@@ -38,3 +39,5 @@ It reads `flag.txt` from the current directory; create a placeholder to test loc
 
 You have solved it when auditing the tampered account calls `secret_audit` and the flag prints.
 Everything you use must be derived at runtime from the leak — if any address in your exploit is a constant, it will work once and fail on the next run. Be ready to explain why.
+
+Submit the flag: https://ctf.security.cs.pub.ro/so/challenges#bonus-heap-mayhem-8

@@ -8,6 +8,8 @@ This program mishandles memory — can you exploit it to get the flag?
 
 Exploit a use-after-free: make the allocator hand you back a chunk the program is still using, and write through it to reach a field you are not supposed to control.
 
+The service is deployed at `141.85.224.106:31013`.
+
 ## Background
 
 The program keeps a heap object `x` with a `flag` field that must read `"pico"` to win — and it starts as `"bico"`.
@@ -36,4 +38,7 @@ It reads `flag.txt` from the current directory; create a placeholder to test loc
 You have solved it when the win check reads `"pico"` out of the reclaimed chunk.
 Be ready to explain *why* the allocator returned the same address — the order of free-then-allocate and the size class are the whole trick.
 
-Link: <https://learn.cylabacademy.org/library/440>
+Submit the flag:
+
+- Link SO CTF: https://ctf.security.cs.pub.ro/so/challenges#04-cylab-heap-3-6
+- Link CyLab Academy: <https://learn.cylabacademy.org/library/440>

@@ -8,6 +8,8 @@ Are overflows just a stack concern?
 
 Overflow a heap buffer to corrupt an adjacent "safe" variable you are never given a way to write to, and read out the flag.
 
+The service is deployed at `141.85.224.106:31010`.
+
 ## Background
 
 The program keeps two heap allocations: `input_data`, which you can write to through the menu, and `safe_var`, which the author believes is out of reach.
@@ -31,11 +33,14 @@ Automating this with [pwntools](https://docs.pwntools.com/) will make the later 
 ```
 
 It reads `flag.txt` from the current directory; create a placeholder to test locally.
-Point your exploit at the deployment with `nc HOST PORT`, or from pwntools with `remote(HOST, PORT)`.
+Point your exploit at the deployment with `nc 141.85.224.106 31010`, or from pwntools with `remote("141.85.224.106", 31010)`.
 
 ## Check Your Work
 
 You have solved it when the program prints the flag instead of "everything is still secure".
 Work out the overflow distance from the two printed addresses rather than by trial and error, and be ready to explain to the teaching assistant why it is larger than the 5 bytes the program asked `malloc` for.
 
-Link: <https://learn.cylabacademy.org/library/438>
+Submit the flag:
+
+- Link SO CTF: https://ctf.security.cs.pub.ro/so/challenges#01-cylab-heap-0-3
+- Link CyLab Academy: <https://learn.cylabacademy.org/library/438>

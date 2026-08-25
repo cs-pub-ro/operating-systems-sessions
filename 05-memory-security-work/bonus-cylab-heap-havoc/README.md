@@ -9,6 +9,7 @@ Overflowing one name on the heap can reach into the *other* name's struct — an
 
 Overflow out of one heap object, across into the next struct, and set a callback field so the program calls a hidden `winner()` function.
 
+The service is deployed at `141.85.224.106:31020`.
 ## Background
 
 The program allocates two `struct internet` objects back-to-back on the heap, each with an undersized 8-byte name buffer, and copies `argv[1]`/`argv[2]` into them with `strcpy()` — no bounds check.
@@ -39,4 +40,7 @@ The deployment cannot take `argv` over a socket, so it reads two lines from you 
 You have solved it when `winner()` runs and prints the flag, instead of "No winners this time".
 Have an explanation ready for why the field between the overflow start and the callback had to hold a valid writable address rather than filler.
 
-Link: <https://learn.cylabacademy.org/library/763>
+Submit the flag:
+
+- Link SO CTF: https://ctf.security.cs.pub.ro/so/challenges#bonus-cylab-heap-havoc-7
+- Link CyLab Academy: <https://learn.cylabacademy.org/library/763>

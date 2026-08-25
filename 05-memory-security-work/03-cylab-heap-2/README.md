@@ -8,6 +8,8 @@ Can you handle function pointers?
 
 Overflow into a value the program later *calls*, and redirect execution to a function that hands you the flag.
 
+The service is deployed at `141.85.224.106:31012`.
+
 ## Background
 
 The same writable buffer sits next to a second heap buffer `x`.
@@ -35,4 +37,7 @@ It reads `flag.txt` from the current directory; create a placeholder to test loc
 You have solved it when calling *Print Flag* jumps into `win()` and the flag appears.
 If it crashes instead, inspect the bytes that ended up in `x` — the byte order of the address is the usual culprit, and worth confirming with the teaching assistant.
 
-Link: <https://learn.cylabacademy.org/library/435>
+Submit the flag:
+
+- Link SO CTF: https://ctf.security.cs.pub.ro/so/challenges#03-cylab-heap-2-5
+- Link CyLab Academy: <https://learn.cylabacademy.org/library/435>

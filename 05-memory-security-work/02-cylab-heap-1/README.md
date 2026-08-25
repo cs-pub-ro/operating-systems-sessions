@@ -8,6 +8,8 @@ Can you control your overflow?
 
 Repeat the heap-0 overflow, but this time land a *specific* value in the neighbouring variable rather than merely disturbing it.
 
+The service is deployed at `141.85.224.106:31011`.
+
 ## Background
 
 The layout is the same as [`01-cylab-heap-0`](../01-cylab-heap-0): a writable `input_data` next to a `safe_var` you are not supposed to touch.
@@ -33,4 +35,7 @@ It reads `flag.txt` from the current directory; create a placeholder to test loc
 You have solved it when the flag prints.
 Think about what would go wrong if the target were a numeric address instead of a readable word — that is exactly the next challenge, so have your answer ready to discuss.
 
-Link: <https://learn.cylabacademy.org/library/439>
+Submit the flag:
+
+- Link SO CTF: https://ctf.security.cs.pub.ro/so/challenges#02-cylab-heap-1-4
+- Link CyLab Academy: <https://learn.cylabacademy.org/library/439>
